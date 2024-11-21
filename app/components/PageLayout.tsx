@@ -327,31 +327,105 @@ function Badge({
   );
 }
 
-function Footer({menu}: {menu?: EnhancedMenu}) {
-  const isHome = useIsHomePath();
-  const itemsCount = menu
-    ? menu?.items?.length + 1 > 4
-      ? 4
-      : menu?.items?.length + 1
-    : [];
-
+function Footer() {
   return (
-    <Section
-      divider={isHome ? 'none' : 'top'}
-      as="footer"
-      role="contentinfo"
-      className={`grid min-h-[25rem] items-start grid-flow-row w-full gap-6 py-8 px-6 md:px-8 lg:px-12 md:gap-8 lg:gap-12 grid-cols-1 md:grid-cols-2 lg:grid-cols-${itemsCount}
-        bg-primary dark:bg-contrast dark:text-primary text-contrast overflow-hidden`}
-    >
-      <FooterMenu menu={menu} />
-      <CountrySelector />
-      <div
-        className={`self-end pt-8 opacity-50 md:col-span-2 lg:col-span-${itemsCount}`}
-      >
-        &copy; {new Date().getFullYear()} / Shopify, Inc. Hydrogen is an MIT
-        Licensed Open Source project.
+    <footer className="bg-white py-16">
+      <div className="max-w-[1440px] mx-auto px-4 md:px-8">
+        {/* Newsletter Section */}
+        <div className="mb-16">
+          <h3 className="text-2xl font-bold text-black mb-4">Be a Part of Our Journey</h3>
+          <p className="text-gray-600 mb-6">
+            Welcome to UNCMFRT. Sign up for exclusive content and we'll send you 10% off.
+          </p>
+          <div className="flex gap-4 max-w-md">
+            <input
+              type="email"
+              placeholder="Email Address"
+              className="flex-1 px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-black"
+            />
+            <button className="bg-black text-white px-6 py-3 rounded-lg font-medium hover:bg-black/90 transition-colors">
+              Subscribe
+            </button>
+          </div>
+        </div>
+
+        {/* Footer Links Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
+          {/* About Us Column */}
+          <div>
+            <h4 className="font-bold text-black mb-4">About Us</h4>
+            <ul className="space-y-3">
+              <li><a href="/blog" className="text-gray-600 hover:text-black">Blog</a></li>
+              <li><a href="/reviews" className="text-gray-600 hover:text-black">Product Reviews</a></li>
+              <li><a href="/our-story" className="text-gray-600 hover:text-black">Our Story</a></li>
+              <li><a href="/delivery" className="text-gray-600 hover:text-black">Delivery</a></li>
+            </ul>
+          </div>
+
+          {/* Support Column */}
+          <div>
+            <h4 className="font-bold text-black mb-4">Support</h4>
+            <ul className="space-y-3">
+              <li><a href="/order-status" className="text-gray-600 hover:text-black">Order Status</a></li>
+              <li><a href="/help" className="text-gray-600 hover:text-black">Help Center</a></li>
+              <li><a href="/contact" className="text-gray-600 hover:text-black">Contact Us</a></li>
+              <li><a href="/returns" className="text-gray-600 hover:text-black">Returns</a></li>
+            </ul>
+          </div>
+
+          {/* Important Link Column */}
+          <div>
+            <h4 className="font-bold text-black mb-4">Important Link</h4>
+            <ul className="space-y-3">
+              <li><a href="/maintenance" className="text-gray-600 hover:text-black">Maintenance</a></li>
+              <li><a href="/warranty" className="text-gray-600 hover:text-black">Warranty</a></li>
+              <li><a href="/canadian-customers" className="text-gray-600 hover:text-black">Canadian Customers</a></li>
+              <li><a href="/setup" className="text-gray-600 hover:text-black">Setup</a></li>
+            </ul>
+          </div>
+
+          {/* Legal Column */}
+          <div>
+            <h4 className="font-bold text-black mb-4">Legal</h4>
+            <ul className="space-y-3">
+              <li><a href="/privacy" className="text-gray-600 hover:text-black">Privacy Policy</a></li>
+              <li><a href="/accessibility" className="text-gray-600 hover:text-black">Accessibility</a></li>
+              <li><a href="/terms" className="text-gray-600 hover:text-black">Terms of Service</a></li>
+              <li><a href="/affiliate" className="text-gray-600 hover:text-black">Affiliate Program</a></li>
+              <li><a href="/articles" className="text-gray-600 hover:text-black">Articles</a></li>
+            </ul>
+          </div>
+
+          {/* Contact Us Column */}
+          <div>
+            <h4 className="font-bold text-black mb-4">Contact Us</h4>
+            <p className="text-gray-600 mb-2">Let Us Help You</p>
+            <p className="text-2xl font-bold text-black mb-6">(888) 860-0572</p>
+            <h4 className="font-bold text-black mb-4">Connect With Us</h4>
+            <div className="flex gap-4">
+              <a href="#" className="text-black hover:text-black/70">
+                <img src="/assets/instagram.svg" alt="Instagram" className="w-6 h-6" />
+              </a>
+              <a href="#" className="text-black hover:text-black/70">
+                <img src="/assets/twitter.svg" alt="Twitter" className="w-6 h-6" />
+              </a>
+              <a href="#" className="text-black hover:text-black/70">
+                <img src="/assets/facebook.svg" alt="Facebook" className="w-6 h-6" />
+              </a>
+              <a href="#" className="text-black hover:text-black/70">
+                <img src="/assets/youtube.svg" alt="YouTube" className="w-6 h-6" />
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="flex flex-col md:flex-row justify-between items-center pt-16 border-t border-gray-200 mt-16 text-gray-600">
+          <p>© uncmfrt.com. All right reserved.</p>
+          <p>Made with ❤️ and ☕ by Arctic Grey</p>
+        </div>
       </div>
-    </Section>
+    </footer>
   );
 }
 

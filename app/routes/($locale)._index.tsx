@@ -297,10 +297,11 @@ export default function Homepage() {
           </div>
 
           {/* Contenedor del scroll horizontal en móvil */}
-          <div className="relative -mx-4 md:-mx-16 lg:-mx-32">
+          <div className="relative -mx-4 md:mx-0 lg:mx-0">
             <button 
               onClick={() => handleScroll('left')}
-              className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-black/80 p-2 rounded-full shadow-lg hidden md:block hover:bg-black transition-colors"
+              className={`absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-black/80 p-3 rounded-full shadow-lg hidden md:block hover:bg-black transition-colors ${currentIndex === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={currentIndex === 0}
             >
               <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -309,7 +310,7 @@ export default function Homepage() {
 
             <div 
               ref={carouselRef}
-              className="flex overflow-hidden pb-8 md:pb-0 gap-8 px-4 md:px-16 lg:px-32 transition-all duration-700 ease-in-out"
+              className="flex overflow-x-auto md:overflow-hidden scrollbar-hide pb-8 md:pb-0 gap-4 md:gap-8 px-4 md:px-8 transition-all duration-500 ease-in-out"
             >
               {[
                 {
@@ -340,9 +341,9 @@ export default function Homepage() {
               ].map((goal, index) => (
                 <div 
                   key={goal.title} 
-                  className="group cursor-pointer flex-shrink-0 w-[calc(33.333%-1.333rem)]"
+                  className="flex-shrink-0 w-[85vw] sm:w-[45vw] md:w-[calc(33.333%-1rem)] group hover:cursor-pointer transform transition-all duration-300 hover:-translate-y-1"
                 >
-                  <div className="h-[300px] md:h-[380px] mb-6 overflow-hidden rounded-3xl bg-gray-100 shadow-lg transition-all duration-300 group-hover:shadow-xl">
+                  <div className="h-[300px] md:h-[380px] mb-6 overflow-hidden rounded-3xl bg-gray-100 shadow-md transition-all duration-300 group-hover:shadow-xl">
                     <div className="h-full w-full bg-gray-100 transition-transform duration-300 group-hover:scale-105"></div>
                   </div>
                   <div className="px-6 md:px-8 py-4 space-y-4">
@@ -367,7 +368,8 @@ export default function Homepage() {
 
             <button 
               onClick={() => handleScroll('right')}
-              className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-black/80 p-2 rounded-full shadow-lg hidden md:block hover:bg-black transition-colors"
+              className={`absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-black/80 p-3 rounded-full shadow-lg hidden md:block hover:bg-black transition-colors ${currentIndex === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={currentIndex === 1}
             >
               <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -440,38 +442,60 @@ export default function Homepage() {
         <div className="max-w-[1440px] mx-auto px-4 md:px-8">
           <div className="mb-16">
             <div className="flex flex-col items-start">
-              <span className="text-xl mb-4">🧐 Why Health & Fitness</span>
+              <span className="text-xl mb-4 text-black">🧐 Why Health & Fitness</span>
               <h2 className="text-4xl md:text-5xl font-bold text-black">
-                Clean Supplements - Made For You
+                Clean Supplements
+                <br />
+                Made For You
               </h2>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="flex flex-col gap-4">
-              <h3 className="text-2xl font-bold">We Make It Easy</h3>
-              <p className="text-gray-600">
-                Personalized Solutions & Guidance Mean You Get Just What You Need Nothing More
+              <img 
+                src="/assets/Like_logo.png" 
+                alt="Like icon" 
+                className="w-[50px] h-[50px] mb-4"
+              />
+              <h3 className="text-2xl font-bold text-black">Why Health & Fitness</h3>
+              <p className="text-gray-800">
+                We Make It Easy For You To Get The Right Supplements For Your Goals
               </p>
             </div>
 
             <div className="flex flex-col gap-4">
-              <h3 className="text-2xl font-bold">Clean & Effective</h3>
-              <p className="text-gray-600">
+              <img 
+                src="/assets/Hojas_logo.png" 
+                alt="Leaves icon" 
+                className="w-[50px] h-[50px] mb-4"
+              />
+              <h3 className="text-2xl font-bold text-black">Clean & Effective</h3>
+              <p className="text-gray-800">
                 Proven Ingredients, not Artificial, Crafted By Experts For Optimal Effectiveness
               </p>
             </div>
 
             <div className="flex flex-col gap-4">
-              <h3 className="text-2xl font-bold">Your Free Dietitian</h3>
-              <p className="text-gray-600">
+              <img 
+                src="/assets/Chat_logo.png" 
+                alt="Chat icon" 
+                className="w-[50px] h-[50px] mb-4"
+              />
+              <h3 className="text-2xl font-bold text-black">Your Free Dietitian</h3>
+              <p className="text-gray-800">
                 Every Gainful Subscriber Gets Free, 1:1 Access Their Own Registered Dietitian.
               </p>
             </div>
 
             <div className="flex flex-col gap-4">
-              <h3 className="text-2xl font-bold">Made For You</h3>
-              <p className="text-gray-600">
+              <img 
+                src="/assets/Documents_logo.png" 
+                alt="Documents icon" 
+                className="w-[50px] h-[50px] mb-4"
+              />
+              <h3 className="text-2xl font-bold text-black">Made For You</h3>
+              <p className="text-gray-800">
                 Performance is Personal. Personalized & Customizable Products For Your Needs, Body & Goals
               </p>
             </div>
@@ -572,3 +596,5 @@ export const FEATURED_COLLECTIONS_QUERY = `#graphql
     }
   }
 ` as const;
+
+
