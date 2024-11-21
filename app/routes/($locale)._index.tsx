@@ -16,6 +16,7 @@ import {seoPayload} from '~/lib/seo.server';
 import {routeHeaders} from '~/data/cache';
 import {Button} from '~/components/Button';
 import {ProductCard} from '~/components/ProductCard';
+import {TestimonialsCarousel} from '~/components/TestimonialsCarousel';
 
 export const headers = routeHeaders;
 
@@ -244,6 +245,7 @@ export default function Homepage() {
                 <img src="/assets/Star.png" alt="star" className="w-4 md:w-5 h-4 md:h-5" />
                 <span className="text-white text-base md:text-xl whitespace-nowrap">Expert Driven</span>
                 <img src="/assets/Star.png" alt="star" className="w-4 md:w-5 h-4 md:h-5" />
+                
               </div>
             ))}
           </div>
@@ -508,6 +510,9 @@ export default function Homepage() {
           </div>
         </div>
       </section>
+
+      {/* Testimonials Section */}
+      <TestimonialsCarousel />
 
       {/* Continuaré con más secciones si necesitas */}
     </div>
