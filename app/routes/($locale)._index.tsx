@@ -316,27 +316,27 @@ export default function Homepage() {
                 {
                   title: 'Sleep',
                   description: 'Optimize your sleep patterns.',
-                  image: '/placeholder.jpg'
+                  image: '/assets/Sleep.png'
                 },
                 {
                   title: 'Cognitive Function',
                   description: 'Enhance your brain\'s performance and connectivity',
-                  image: '/placeholder.jpg'
+                  image: '/assets/Cognitive_function.png'
                 },
                 {
                   title: 'Foundational Health',
                   description: 'Promoting healthy, natural deep sleep day to day',
-                  image: '/placeholder.jpg'
+                  image: '/assets/Foundational_Health.png'
                 },
                 {
                   title: 'Athletic Performance',
                   description: 'Increase your healthy tissue, muscle, and energy',
-                  image: '/placeholder.jpg'
+                  image: '/assets/Athletic_performance.png'
                 },
                 {
                   title: 'Hormone Support',
                   description: 'Boost your mood, libido, and vitality',
-                  image: '/placeholder.jpg'
+                  image: '/assets/Hormone_Support.png'
                 }
               ].map((goal, index) => (
                 <div 
@@ -344,7 +344,13 @@ export default function Homepage() {
                   className="flex-shrink-0 w-[85vw] sm:w-[45vw] md:w-[calc(33.333%-1rem)] group hover:cursor-pointer transform transition-all duration-300 hover:-translate-y-1"
                 >
                   <div className="h-[300px] md:h-[380px] mb-6 overflow-hidden rounded-3xl bg-gray-100 shadow-md transition-all duration-300 group-hover:shadow-xl">
-                    <div className="h-full w-full bg-gray-100 transition-transform duration-300 group-hover:scale-105"></div>
+                    <img
+                      src={goal.image}
+                      alt={goal.title}
+                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      width={288}
+                      height={392}
+                    />
                   </div>
                   <div className="px-6 md:px-8 py-4 space-y-4">
                     <h3 className="text-xl md:text-2xl font-bold flex items-center justify-between text-black group-hover:text-black/80 transition-colors">
