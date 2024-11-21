@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -17,6 +19,11 @@
   --height-nav: 3rem;
   --screen-height: 100vh;
   --screen-height-dynamic: 100vh;
+  --color-header-bg: 255 255 255;  /* Blanco */
+  --color-header-text: 0 0 0;      /* Negro */
+  --header-height: 4rem;           /* 64px (h-16) */
+  --font-heading: 'Rubik', sans-serif;
+  --font-body: 'Rubik', sans-serif;
 
   @media (min-width: 32em) {
     --height-nav: 4rem;
@@ -49,6 +56,19 @@
   100% {
     opacity: 1;
   }
+}
+
+@keyframes infinite-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-16.666% - 4rem));
+  }
+}
+
+.animate-infinite-scroll {
+  animation: infinite-scroll 15s linear infinite;
 }
 
 shop-pay-button {

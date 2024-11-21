@@ -223,7 +223,48 @@ export default function Product() {
           resolve={recommended}
         >
           {(products) => (
-            <ProductSwimlane title="Related Products" products={products} />
+            <section className="py-24 bg-gray-50">
+              <div className="max-w-[1440px] mx-auto px-8">
+                <div className="text-center mb-16">
+                  <h2 className="text-5xl font-bold mb-6 text-black">
+                    Recommended For You
+                  </h2>
+                  <p className="text-xl text-gray-600 font-medium max-w-2xl mx-auto">
+                    Based on your preferences, you might also like these products
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {products.nodes.map((product) => (
+                    <Link key={product.id} to={`/products/${product.handle}`}>
+                      <div className="group cursor-pointer bg-white rounded-2xl overflow-hidden shadow-md">
+                        <div className="relative h-[300px] overflow-hidden">
+                          {product.featuredImage && (
+                            <img
+                              src={product.featuredImage.url}
+                              alt={product.featuredImage.altText || product.title}
+                              className="w-full h-full object-cover"
+                            />
+                          )}
+                          <div className="absolute top-4 left-4 bg-black text-white text-sm px-3 py-1 rounded-full">
+                            {product.availableForSale ? 'In Stock' : 'Sold Out'}
+                          </div>
+                        </div>
+                        <div className="p-8">
+                          <h3 className="text-2xl font-bold mb-3 text-black">{product.title}</h3>
+                          <div className="flex items-center justify-between">
+                            <Money withoutTrailingZeros data={product.priceRange.minVariantPrice} />
+                            <div className="bg-black text-white px-6 py-2 rounded-lg font-medium group-hover:bg-black/90 transition-colors">
+                              View Details
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </section>
           )}
         </Await>
       </Suspense>

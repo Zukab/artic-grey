@@ -6,29 +6,35 @@ import {
   FEATURED_COLLECTION_FRAGMENT,
 } from '~/data/fragments';
 
-export async function loader({context: {storefront}}: LoaderFunctionArgs) {
-  return json(await getFeaturedData(storefront));
+export async function loader({context}: LoaderFunctionArgs) {
+  if (!context.storefront) {
+    console.error('Storefront client not available');
+    return json({
+      products: [],
+      error: 'Storefront client not available'
+    });
+  }
+
+  try {
+    const data = await context.storefront.query(FEATURED_ITEMS_QUERY, {
+      variables: {
+        country: context.storefront.i18n.country,
+        language: context.storefront.i18n.language,
+      },
+      cache: context.storefront.CacheLong(),
+    });
+
+    return json({
+      products: data.products?.nodes || [],
+    });
+  } catch (error) {
+    console.error('Featured products error:', error);
+    return json({
+      products: [],
+      error: 'Error fetching products'
+    });
+  }
 }
-
-export async function getFeaturedData(
-  storefront: LoaderFunctionArgs['context']['storefront'],
-  variables: {pageBy?: number} = {},
-) {
-  const data = await storefront.query(FEATURED_ITEMS_QUERY, {
-    variables: {
-      pageBy: 12,
-      country: storefront.i18n.country,
-      language: storefront.i18n.language,
-      ...variables,
-    },
-  });
-
-  invariant(data, 'No featured items data returned from Shopify API');
-
-  return data;
-}
-
-export type FeaturedData = Awaited<ReturnType<typeof getFeaturedData>>;
 
 export const FEATURED_ITEMS_QUERY = `#graphql
   query FeaturedItems(
@@ -36,18 +42,11 @@ export const FEATURED_ITEMS_QUERY = `#graphql
     $language: LanguageCode
     $pageBy: Int = 12
   ) @inContext(country: $country, language: $language) {
-    featuredCollections: collections(first: 3, sortKey: UPDATED_AT) {
-      nodes {
-        ...FeaturedCollectionDetails
-      }
-    }
-    featuredProducts: products(first: $pageBy) {
+    products(first: $pageBy) {
       nodes {
         ...ProductCard
       }
     }
   }
-
   ${PRODUCT_CARD_FRAGMENT}
-  ${FEATURED_COLLECTION_FRAGMENT}
 ` as const;

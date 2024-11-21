@@ -1,7 +1,7 @@
 import {useParams, Form, Await, useRouteLoaderData} from '@remix-run/react';
 import useWindowScroll from 'react-use/esm/useWindowScroll';
 import {Disclosure} from '@headlessui/react';
-import {Suspense, useEffect, useMemo} from 'react';
+import {Suspense, useEffect, useMemo, useState} from 'react';
 import {CartForm} from '@shopify/hydrogen';
 
 import {type LayoutQuery} from 'storefrontapi.generated';
@@ -47,8 +47,19 @@ export function PageLayout({children, layout}: LayoutProps) {
             Skip to content
           </a>
         </div>
-        {headerMenu && layout?.shop.name && (
-          <Header title={layout.shop.name} menu={headerMenu} />
+        {headerMenu && (
+          <Header 
+            title="UNCMFRT.COM"
+            menu={{
+              items: [
+                { id: 'science', title: 'Science', to: '/science', target: '_self' },
+                { id: 'shop', title: 'Shop', to: '/shop', target: '_self' },
+                { id: 'podcasts', title: 'Podcasts', to: '/podcasts', target: '_self' },
+                { id: 'trainers', title: 'Trainers', to: '/trainers', target: '_self' },
+                { id: 'blog', title: 'Blog', to: '/blog', target: '_self' },
+              ]
+            }} 
+          />
         )}
         <main role="main" id="mainContent" className="flex-grow">
           {children}
@@ -61,7 +72,6 @@ export function PageLayout({children, layout}: LayoutProps) {
 
 function Header({title, menu}: {title: string; menu?: EnhancedMenu}) {
   const isHome = useIsHomePath();
-
   const {
     isOpen: isCartOpen,
     openDrawer: openCart,
@@ -74,14 +84,6 @@ function Header({title, menu}: {title: string; menu?: EnhancedMenu}) {
     closeDrawer: closeMenu,
   } = useDrawer();
 
-  const addToCartFetchers = useCartFetchers(CartForm.ACTIONS.LinesAdd);
-
-  // toggle cart drawer when adding to cart
-  useEffect(() => {
-    if (isCartOpen || !addToCartFetchers.length) return;
-    openCart();
-  }, [addToCartFetchers, isCartOpen, openCart]);
-
   return (
     <>
       <CartDrawer isOpen={isCartOpen} onClose={closeCart} />
@@ -92,11 +94,6 @@ function Header({title, menu}: {title: string; menu?: EnhancedMenu}) {
         isHome={isHome}
         title={title}
         menu={menu}
-        openCart={openCart}
-      />
-      <MobileHeader
-        isHome={isHome}
-        title={title}
         openCart={openCart}
         openMenu={openMenu}
       />
@@ -131,191 +128,114 @@ export function MenuDrawer({
   menu: EnhancedMenu;
 }) {
   return (
-    <Drawer open={isOpen} onClose={onClose} openFrom="left" heading="Menu">
-      <div className="grid">
-        <MenuMobileNav menu={menu} onClose={onClose} />
-      </div>
-    </Drawer>
-  );
-}
-
-function MenuMobileNav({
-  menu,
-  onClose,
-}: {
-  menu: EnhancedMenu;
-  onClose: () => void;
-}) {
-  return (
-    <nav className="grid gap-4 p-6 sm:gap-6 sm:px-12 sm:py-8">
-      {/* Top level menu items */}
-      {(menu?.items || []).map((item) => (
-        <span key={item.id} className="block">
-          <Link
-            to={item.to}
-            target={item.target}
-            onClick={onClose}
-            className={({isActive}) =>
-              isActive ? 'pb-1 border-b -mb-px' : 'pb-1'
-            }
-          >
-            <Text as="span" size="copy">
-              {item.title}
-            </Text>
-          </Link>
-        </span>
-      ))}
-    </nav>
-  );
-}
-
-function MobileHeader({
-  title,
-  isHome,
-  openCart,
-  openMenu,
-}: {
-  title: string;
-  isHome: boolean;
-  openCart: () => void;
-  openMenu: () => void;
-}) {
-  // useHeaderStyleFix(containerStyle, setContainerStyle, isHome);
-
-  const params = useParams();
-
-  return (
-    <header
-      role="banner"
-      className={`${
-        isHome
-          ? 'bg-primary/80 dark:bg-contrast/60 text-contrast dark:text-primary shadow-darkHeader'
-          : 'bg-contrast/80 text-primary'
-      } flex lg:hidden items-center h-nav sticky backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-4 px-4 md:px-8`}
-    >
-      <div className="flex items-center justify-start w-full gap-4">
-        <button
-          onClick={openMenu}
-          className="relative flex items-center justify-center w-8 h-8"
-        >
-          <IconMenu />
-        </button>
-        <Form
-          method="get"
-          action={params.locale ? `/${params.locale}/search` : '/search'}
-          className="items-center gap-2 sm:flex"
-        >
-          <button
-            type="submit"
-            className="relative flex items-center justify-center w-8 h-8"
-          >
-            <IconSearch />
-          </button>
-          <Input
-            className={
-              isHome
-                ? 'focus:border-contrast/20 dark:focus:border-primary/20'
-                : 'focus:border-primary/20'
-            }
-            type="search"
-            variant="minisearch"
-            placeholder="Search"
-            name="q"
-          />
-        </Form>
-      </div>
-
-      <Link
-        className="flex items-center self-stretch leading-[3rem] md:leading-[4rem] justify-center flex-grow w-full h-full"
-        to="/"
-      >
-        <Heading
-          className="font-bold text-center leading-none"
-          as={isHome ? 'h1' : 'h2'}
-        >
-          {title}
-        </Heading>
-      </Link>
-
-      <div className="flex items-center justify-end w-full gap-4">
-        <AccountLink className="relative flex items-center justify-center w-8 h-8" />
-        <CartCount isHome={isHome} openCart={openCart} />
-      </div>
-    </header>
-  );
-}
-
-function DesktopHeader({
-  isHome,
-  menu,
-  openCart,
-  title,
-}: {
-  isHome: boolean;
-  openCart: () => void;
-  menu?: EnhancedMenu;
-  title: string;
-}) {
-  const params = useParams();
-  const {y} = useWindowScroll();
-  return (
-    <header
-      role="banner"
-      className={`${
-        isHome
-          ? 'bg-primary/80 dark:bg-contrast/60 text-contrast dark:text-primary shadow-darkHeader'
-          : 'bg-contrast/80 text-primary'
-      } ${
-        !isHome && y > 50 && ' shadow-lightHeader'
-      } hidden h-nav lg:flex items-center sticky transition duration-300 backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-8 px-12 py-8`}
-    >
-      <div className="flex gap-12">
-        <Link className="font-bold" to="/" prefetch="intent">
-          {title}
-        </Link>
-        <nav className="flex gap-8">
-          {/* Top level menu items */}
+    <Drawer open={isOpen} onClose={onClose} openFrom="right" heading="Menu">
+      <div className="grid gap-4 p-6 md:gap-8 md:p-8 h-screen bg-[#1B1F23]">
+        <nav className="grid gap-4 grid-flow-row">
           {(menu?.items || []).map((item) => (
             <Link
               key={item.id}
               to={item.to}
               target={item.target}
-              prefetch="intent"
-              className={({isActive}) =>
-                isActive ? 'pb-1 border-b -mb-px' : 'pb-1'
-              }
+              className="text-xl md:text-2xl font-medium text-white hover:text-white/70 py-2 border-b border-white/10"
+              onClick={onClose}
             >
               {item.title}
             </Link>
           ))}
+          <button 
+            className="mt-8 bg-white text-[#1B1F23] px-4 py-3 rounded-md text-lg font-medium"
+            onClick={onClose}
+          >
+            Take The Quiz
+          </button>
         </nav>
       </div>
-      <div className="flex items-center gap-1">
-        <Form
-          method="get"
-          action={params.locale ? `/${params.locale}/search` : '/search'}
-          className="flex items-center gap-2"
-        >
-          <Input
-            className={
-              isHome
-                ? 'focus:border-contrast/20 dark:focus:border-primary/20'
-                : 'focus:border-primary/20'
-            }
-            type="search"
-            variant="minisearch"
-            placeholder="Search"
-            name="q"
-          />
+    </Drawer>
+  );
+}
+
+function DesktopHeader({isHome, menu, openCart, openMenu, title}: {
+  isHome: boolean;
+  openCart: () => void;
+  openMenu: () => void;
+  menu?: EnhancedMenu;
+  title: string;
+}) {
+  return (
+    <header
+      role="banner"
+      className={`
+        fixed top-4 left-0 right-0 mx-auto 
+        max-w-7xl bg-white/95 backdrop-blur-sm
+        border border-gray-200 
+        flex items-center h-16 
+        px-4 sm:px-6 lg:px-8 
+        rounded-lg
+        z-50 transition-all duration-300
+        shadow-sm
+      `}
+    >
+      <div className="flex w-full items-center justify-between">
+        {/* Logo y Menú Móvil */}
+        <div className="flex items-center gap-4">
           <button
-            type="submit"
-            className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5"
+            onClick={openMenu}
+            className="block lg:hidden text-black hover:text-black/70 transition-colors"
           >
-            <IconSearch />
+            <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
           </button>
-        </Form>
-        <AccountLink className="relative flex items-center justify-center w-8 h-8 focus:ring-primary/5" />
-        <CartCount isHome={isHome} openCart={openCart} />
+          <Link to="/" className="text-black font-bold text-lg">
+            {title}
+          </Link>
+        </div>
+
+        {/* Menú Principal - Solo visible en desktop */}
+        <nav className="hidden lg:block">
+          <ul className="flex items-center gap-6">
+            {(menu?.items || []).map((item) => (
+              <li key={item.id}>
+                <Link
+                  to={item.to}
+                  target={item.target}
+                  className="text-black hover:text-black/70 text-sm lg:text-base"
+                >
+                  {item.title}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        {/* Botones de Acción */}
+        <div className="flex items-center gap-2 sm:gap-4">
+          <button 
+            className="hidden sm:block bg-[#1B1F23] text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-md text-sm font-medium whitespace-nowrap"
+          >
+            Take The Quiz
+          </button>
+          <Link to="/account" className="hidden sm:block">
+            <img 
+              src="/assets/Usericon.svg" 
+              alt="User account" 
+              className="w-[30px] h-[30px] sm:w-[35px] sm:h-[35px]"
+            />
+          </Link>
+          <button 
+            onClick={openCart}
+            className="relative flex items-center justify-center"
+          >
+            <img 
+              src="/assets/Carshopping.svg" 
+              alt="Shopping cart" 
+              className="w-[30px] h-[30px] sm:w-[35px] sm:h-[35px]"
+            />
+            <span className="absolute -top-2 -right-2 bg-black text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+              0
+            </span>
+          </button>
+        </div>
       </div>
     </header>
   );
