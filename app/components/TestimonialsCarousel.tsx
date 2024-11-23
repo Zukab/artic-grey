@@ -90,7 +90,7 @@ export function TestimonialsCarousel() {
           </p>
         </div>
 
-        <div className="relative">
+        <div className="relative overflow-hidden">
           <button 
             onClick={handlePrevious}
             className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-black/80 p-3 rounded-full shadow-lg hover:bg-black transition-colors"
@@ -100,11 +100,11 @@ export function TestimonialsCarousel() {
             </svg>
           </button>
 
-          <div className="relative overflow-hidden">
+          <div className="relative w-[1200px] mx-auto overflow-hidden">
             <div 
               className="flex gap-8 transition-transform duration-500 ease-in-out mx-auto"
               style={{
-                transform: `translateX(calc(40% - ${currentIndex * 20}% - ${currentIndex * 1}rem))`,
+                transform: `translateX(calc(38% - ${currentIndex * 25}% - ${currentIndex * 1}rem))`,
                 width: 'fit-content'
               }}
             >
@@ -114,53 +114,47 @@ export function TestimonialsCarousel() {
                   className={`flex-shrink-0 transition-all duration-500 ${
                     index === currentIndex 
                       ? 'w-[500px] z-10' 
-                      : 'w-[200px] opacity-50'
+                      : 'w-[300px] opacity-50'
                   }`}
                 >
-                  <div className="h-[400px] flex flex-col">
-                    <div 
-                      className={`rounded-2xl overflow-hidden transition-all duration-500 ${
-                        index === currentIndex 
-                          ? 'h-[300px]' 
-                          : 'h-[150px]'
-                      }`}
-                    >
-                      <img
-                        src={testimonial.image}
-                        alt="Customer testimonial"
-                        className={`w-full h-full transition-all duration-500 ${
-                          index === currentIndex 
-                            ? 'object-contain' 
-                            : 'object-cover'
-                        }`}
-                      />
-                    </div>
-
-                    <div className={`mt-4 transition-all duration-500 ${
+                  <div 
+                    className={`rounded-2xl overflow-hidden transition-all duration-500 ${
                       index === currentIndex 
-                        ? 'scale-100' 
-                        : 'scale-90'
+                        ? 'h-[516px]' 
+                        : 'h-[516px]'
+                    }`}
+                  >
+                    <img
+                      src={testimonial.image}
+                      alt="Customer testimonial"
+                      className={`w-full h-full transition-all duration-500 ${
+                        index === currentIndex 
+                          ? 'object-cover' 
+                          : 'object-cover'
+                      }`}
+                    />
+                  </div>
+
+                  <div className={`mt-4 transition-all duration-500`}>
+                    <div className={`flex items-center justify-center gap-4 bg-white rounded-xl p-4 shadow-md ${
+                      index === currentIndex ? 'flex-row' : 'flex-col'
                     }`}>
-                      <div className={`flex items-center justify-center gap-4 bg-white rounded-xl p-4 shadow-md ${
-                        index === currentIndex ? 'flex-row' : 'flex-col'
-                      }`}>
-                        <div className="text-center">
-                          <h3 className={`font-bold text-black ${
-                            index === currentIndex ? 'text-base' : 'text-sm'
-                          }`}>
-                            {testimonial.productTitle}
-                          </h3>
-                          <Money 
-                            data={testimonial.productPrice}
-                            className="text-black/70"
-                          />
-                        </div>
-                        {index === currentIndex && (
-                          <button className="ml-4 bg-black text-white px-4 py-2 rounded-lg hover:bg-black/90 transition-colors">
-                            Shop Now
-                          </button>
-                        )}
+                      <div className="text-center">
+                        <h3 className={`font-bold text-black ${
+                          index === currentIndex ? 'text-base' : 'text-sm'
+                        }`}>
+                          {testimonial.productTitle}
+                        </h3>
+                        <Money 
+                          data={testimonial.productPrice}
+                          className="text-black/70"
+                        />
                       </div>
+                      {index === currentIndex && (
+                        <button className="ml-4 bg-black text-white px-4 py-2 rounded-lg hover:bg-black/90 transition-colors">
+                          Shop Now
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>
