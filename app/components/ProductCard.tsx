@@ -26,8 +26,15 @@ export function ProductCard({
   
   const {image, price} = firstVariant;
 
-  // Tags simulados (estos deberían venir de los metadatos del producto)
-  const tags = ['GMO Free', 'Gluten Free', 'Vegan', 'Dairy Free'];
+  // Tags y descripción según el producto
+  let tags = ['GMO Free', 'Gluten Free', 'Vegan', 'Dairy Free'];
+  let shortDescription = 'Supports cognitive function';
+
+  // Personalizar para Magnesium L-Threonate
+  if (product.title === 'Magnesium L-Threonate') {
+    tags = ['GMO Free', 'Gluten Free', 'Vegan', 'Dairy Free'];
+    shortDescription = 'Enhances the quality of sleep.';
+  }
 
   return (
     <Link
@@ -76,7 +83,7 @@ export function ProductCard({
             {product.title}
           </h3>
           <p className="text-sm text-gray-600 mb-2">
-            Supports cognitive function
+            {shortDescription}
           </p>
         </div>
 

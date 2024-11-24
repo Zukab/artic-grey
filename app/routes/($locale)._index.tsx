@@ -17,6 +17,7 @@ import {routeHeaders} from '~/data/cache';
 import {Button} from '~/components/Button';
 import {ProductCard} from '~/components/ProductCard';
 import {TestimonialsCarousel} from '~/components/TestimonialsCarousel';
+import {BundlesSection} from '~/components/BundlesSection';
 
 export const headers = routeHeaders;
 
@@ -145,6 +146,75 @@ export const meta = ({matches}: MetaArgs<typeof loader>) => {
 };
 
 export default function Homepage() {
+  const goalsCarouselRef = useRef<HTMLDivElement>(null);
+  const supplementsCarouselRef = useRef<HTMLDivElement>(null);
+  const [goalsIndex, setGoalsIndex] = useState(0);
+  const [supplementsIndex, setSupplementsIndex] = useState(0);
+
+  const handleGoalsScroll = (direction: 'left' | 'right') => {
+    if (!goalsCarouselRef.current) return;
+    
+    const scrollAmount = goalsCarouselRef.current.clientWidth;
+    const maxScroll = goalsCarouselRef.current.scrollWidth - goalsCarouselRef.current.clientWidth;
+    const currentScroll = goalsCarouselRef.current.scrollLeft;
+    
+    if (direction === 'left') {
+      const newScroll = Math.max(currentScroll - scrollAmount, 0);
+      goalsCarouselRef.current.scrollTo({
+        left: newScroll,
+        behavior: 'smooth'
+      });
+      setGoalsIndex(newScroll > 0 ? 1 : 0);
+    } else {
+      const newScroll = Math.min(currentScroll + scrollAmount, maxScroll);
+      goalsCarouselRef.current.scrollTo({
+        left: newScroll,
+        behavior: 'smooth'
+      });
+      setGoalsIndex(newScroll < maxScroll ? 0 : 1);
+    }
+  };
+
+  const handleSupplementsScroll = (direction: 'left' | 'right') => {
+    if (!supplementsCarouselRef.current) return;
+    
+    const scrollAmount = supplementsCarouselRef.current.clientWidth;
+    const maxScroll = supplementsCarouselRef.current.scrollWidth - supplementsCarouselRef.current.clientWidth;
+    const currentScroll = supplementsCarouselRef.current.scrollLeft;
+    
+    if (direction === 'left') {
+      const newScroll = Math.max(currentScroll - scrollAmount, 0);
+      supplementsCarouselRef.current.scrollTo({
+        left: newScroll,
+        behavior: 'smooth'
+      });
+      setSupplementsIndex(newScroll > 0 ? 1 : 0);
+    } else {
+      const newScroll = Math.min(currentScroll + scrollAmount, maxScroll);
+      supplementsCarouselRef.current.scrollTo({
+        left: newScroll,
+        behavior: 'smooth'
+      });
+      setSupplementsIndex(newScroll < maxScroll ? 0 : 1);
+    }
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (supplementsCarouselRef.current) {
+        const maxScrolls = 1;
+        
+        if (supplementsIndex < maxScrolls) {
+          handleSupplementsScroll('right');
+        } else {
+          handleSupplementsScroll('left');
+        }
+      }
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [supplementsIndex]);
+
   const {
     primaryHero,
     secondaryHero,
@@ -152,55 +222,6 @@ export default function Homepage() {
     featuredCollections,
     featuredProducts,
   } = useLoaderData<typeof loader>();
-
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const carouselRef = useRef<HTMLDivElement>(null);
-
-  const handleScroll = (direction: 'left' | 'right') => {
-    if (carouselRef.current) {
-      const container = carouselRef.current;
-      const cards = container.children;
-      const cardWidth = cards[0].clientWidth;
-      const gap = 32;
-      const cardsPerView = 3;
-      const scrollDistance = (cardWidth + gap) * cardsPerView;
-      const maxScrolls = 1;
-      
-      if (direction === 'left' && currentIndex > 0) {
-        setCurrentIndex(prev => prev - 1);
-        container.scrollTo({
-          left: scrollDistance * (currentIndex - 1),
-          behavior: 'smooth'
-        });
-      } else if (direction === 'right' && currentIndex < maxScrolls) {
-        setCurrentIndex(prev => prev + 1);
-        container.scrollTo({
-          left: scrollDistance * (currentIndex + 1),
-          behavior: 'smooth'
-        });
-      }
-    }
-  };
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (carouselRef.current) {
-        const maxScrolls = 1;
-        
-        if (currentIndex < maxScrolls) {
-          handleScroll('right');
-        } else {
-          setCurrentIndex(0);
-          carouselRef.current.scrollTo({
-            left: 0,
-            behavior: 'smooth'
-          });
-        }
-      }
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [currentIndex]);
 
   return (
     <div className="flex flex-col w-full">
@@ -301,9 +322,9 @@ export default function Homepage() {
           {/* Contenedor del scroll horizontal en móvil */}
           <div className="relative -mx-4 md:mx-0 lg:mx-0">
             <button 
-              onClick={() => handleScroll('left')}
-              className={`absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-black/80 p-3 rounded-full shadow-lg hidden md:block hover:bg-black transition-colors ${currentIndex === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
-              disabled={currentIndex === 0}
+              onClick={() => handleGoalsScroll('left')}
+              className={`absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-black/80 p-3 rounded-full shadow-lg hidden md:block hover:bg-black transition-colors ${goalsCarouselRef.current?.scrollLeft === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={goalsCarouselRef.current?.scrollLeft === 0}
             >
               <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -311,7 +332,7 @@ export default function Homepage() {
             </button>
 
             <div 
-              ref={carouselRef}
+              ref={goalsCarouselRef}
               className="flex overflow-x-auto md:overflow-hidden scrollbar-hide pb-8 md:pb-0 gap-4 md:gap-8 px-4 md:px-8 transition-all duration-500 ease-in-out"
             >
               {[
@@ -375,9 +396,9 @@ export default function Homepage() {
             </div>
 
             <button 
-              onClick={() => handleScroll('right')}
-              className={`absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-black/80 p-3 rounded-full shadow-lg hidden md:block hover:bg-black transition-colors ${currentIndex === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
-              disabled={currentIndex === 1}
+              onClick={() => handleGoalsScroll('right')}
+              className={`absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-black/80 p-3 rounded-full shadow-lg hidden md:block hover:bg-black transition-colors ${goalsCarouselRef.current?.scrollLeft >= (goalsCarouselRef.current?.scrollWidth - goalsCarouselRef.current?.clientWidth) ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={goalsCarouselRef.current?.scrollLeft >= (goalsCarouselRef.current?.scrollWidth - goalsCarouselRef.current?.clientWidth)}
             >
               <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -387,7 +408,7 @@ export default function Homepage() {
         </div>
       </section>
 
-      {/* Featured Products */}
+      {/* Supplements Section */}
       {featuredProducts && (
         <Suspense>
           <Await resolve={featuredProducts}>
@@ -395,43 +416,53 @@ export default function Homepage() {
               if (!response?.products?.nodes) return null;
               return (
                 <section className="py-24 bg-white">
-                  <div className="max-w-[1440px] mx-auto px-8">
-                    <div className="flex flex-col items-center text-center mb-16">
-                      <span className="text-sm uppercase tracking-wider text-gray-500 mb-4">
-                        Trending ⭐
-                      </span>
-                      <h2 className="text-5xl font-bold text-black mb-4">
-                        Supplements
-                      </h2>
+                  <div className="max-w-[1440px] mx-auto px-4 md:px-8">
+                    <div className="flex items-center justify-between mb-12">
+                      <div>
+                        <span className="text-sm uppercase tracking-wider text-gray-500 mb-4 block">
+                          Trending ⭐
+                        </span>
+                        <h2 className="text-3xl md:text-5xl font-bold text-black">
+                          Supplements
+                        </h2>
+                      </div>
                       <Link 
                         to="/products"
                         className="text-black text-lg underline underline-offset-4 hover:text-black/70 transition-colors"
                       >
-                        View all
+                        View All Products
                       </Link>
                     </div>
-                    
+
                     <div className="relative">
                       <button 
-                        className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-black/80 p-2 rounded-full shadow-lg hidden md:block hover:bg-black transition-colors"
+                        onClick={() => handleSupplementsScroll('left')}
+                        className={`absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-black/80 p-3 rounded-full shadow-lg hidden md:block hover:bg-black transition-colors ${supplementsCarouselRef.current?.scrollLeft === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        disabled={supplementsCarouselRef.current?.scrollLeft === 0}
                       >
                         <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                         </svg>
                       </button>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                      <div 
+                        ref={supplementsCarouselRef}
+                        className="flex overflow-x-auto md:overflow-hidden scrollbar-hide gap-4 md:gap-8 pb-8 md:pb-0 transition-all duration-500 ease-in-out"
+                      >
                         {response.products.nodes.map((product) => (
-                          <ProductCard
-                            key={product.id}
-                            product={product}
-                            loading="lazy"
-                          />
+                          <div key={product.id} className="flex-shrink-0 w-[280px] md:w-[300px]">
+                            <ProductCard
+                              product={product}
+                              loading="lazy"
+                            />
+                          </div>
                         ))}
                       </div>
 
                       <button 
-                        className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-black/80 p-2 rounded-full shadow-lg hidden md:block hover:bg-black transition-colors"
+                        onClick={() => handleSupplementsScroll('right')}
+                        className={`absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-black/80 p-3 rounded-full shadow-lg hidden md:block hover:bg-black transition-colors ${supplementsCarouselRef.current?.scrollLeft >= (supplementsCarouselRef.current?.scrollWidth - supplementsCarouselRef.current?.clientWidth) ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        disabled={supplementsCarouselRef.current?.scrollLeft >= (supplementsCarouselRef.current?.scrollWidth - supplementsCarouselRef.current?.clientWidth)}
                       >
                         <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -446,6 +477,7 @@ export default function Homepage() {
         </Suspense>
       )}
 
+      {/* Transform Your Life Section */}
       <section className="py-24 bg-gray-50">
         <div className="max-w-[1440px] mx-auto px-4 md:px-8">
           <div className="mb-16">
@@ -514,7 +546,32 @@ export default function Homepage() {
       {/* Testimonials Section */}
       <TestimonialsCarousel />
 
-      {/* Continuaré con más secciones si necesitas */}
+      {/* Bundles Section */}
+      {featuredProducts && (
+        <Suspense>
+          <Await resolve={featuredProducts}>
+            {(response) => {
+              if (!response?.products?.nodes) return null;
+              const bundleProducts = {
+                products: {
+                  nodes: response.products.nodes.filter((product: any) => 
+                    product.title.toLowerCase().includes('bundle') ||
+                    product.title.toLowerCase().includes('supply') ||
+                    product.tags?.some(tag => 
+                      tag.toLowerCase().includes('bundle') ||
+                      tag.toLowerCase().includes('supply')
+                    ) ||
+                    product.collections?.nodes?.some(collection => 
+                      collection.handle === 'bundles'
+                    )
+                  )
+                }
+              };
+              return <BundlesSection products={bundleProducts.products} />;
+            }}
+          </Await>
+        </Suspense>
+      )}
     </div>
   );
 }
