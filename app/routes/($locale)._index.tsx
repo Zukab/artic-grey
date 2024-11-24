@@ -18,6 +18,8 @@ import {Button} from '~/components/Button';
 import {ProductCard} from '~/components/ProductCard';
 import {TestimonialsCarousel} from '~/components/TestimonialsCarousel';
 import {BundlesSection} from '~/components/BundlesSection';
+import {ProductShowcase} from '~/components/ProductShowcase';
+import {BlogArticles} from '~/components/BlogArticles';
 
 export const headers = routeHeaders;
 
@@ -572,6 +574,44 @@ export default function Homepage() {
           </Await>
         </Suspense>
       )}
+
+      <ProductShowcase />
+
+      {/* The Next Generation Section */}
+      <section className="relative py-24 bg-[#F9FAFB]">
+        <div className="max-w-[1440px] mx-auto px-4 md:px-8">
+          <div className="relative h-[80vh] rounded-3xl overflow-hidden">
+            <div className="absolute inset-0">
+              <img
+                src="/assets/Rectangle478.png"
+                alt="Person in bathtub"
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            <div className="relative z-10 flex flex-col justify-center h-full p-8 md:p-16">
+              <div className="max-w-2xl">
+                <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6">
+                  The Next Generation is Here
+                </h2>
+                <p className="text-lg md:text-xl text-white/90 mb-8">
+                  Innovative Engineering. Intelligent Design. Meet The Plunge All-I.
+                </p>
+                <div className="flex flex-wrap gap-4">
+                  <button className="bg-white text-black px-6 py-3 rounded-lg font-medium hover:bg-white/90 transition-colors">
+                    Take The Plunge
+                  </button>
+                  <button className="bg-transparent border border-white text-white px-6 py-3 rounded-lg font-medium hover:bg-white/10 transition-colors">
+                    Dive Deeper
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <BlogArticles />
     </div>
   );
 }
