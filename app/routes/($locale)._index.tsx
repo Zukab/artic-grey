@@ -237,7 +237,6 @@ export default function Homepage() {
               muted
               loop
               className="w-full h-full object-cover"
-              poster="/assets/hero-poster.jpg"
             >
               <source src="assets/hero-video.mp4" type="video/mp4" />
             </video>
@@ -546,7 +545,7 @@ export default function Homepage() {
       </section>
 
       {/* Testimonials Section */}
-      <TestimonialsCarousel />
+      <TestimonialsCarousel products={featuredProducts} />
 
       {/* Bundles Section */}
       {featuredProducts && (

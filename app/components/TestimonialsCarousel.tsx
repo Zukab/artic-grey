@@ -5,10 +5,15 @@ import {Money} from '@shopify/hydrogen';
 type Testimonial = {
   id: number;
   video: string;
-  productTitle: string;
-  productPrice: {
-    amount: string;
-    currencyCode: string;
+  product: {
+    title: string;
+    handle: string;
+    priceRange: {
+      minVariantPrice: {
+        amount: string;
+        currencyCode: string;
+      };
+    };
   };
 };
 
@@ -37,46 +42,71 @@ export function TestimonialsCarousel() {
     {
       id: 1,
       video: '/assets/1.mp4',
-      productTitle: 'Performance Bundle',
-      productPrice: {
-        amount: '149.99',
-        currencyCode: 'USD'
+      product: {
+        title: 'omega-3',
+        handle: 'Omega-3',
+        priceRange: {
+          minVariantPrice: {
+            amount: '49.95',
+            currencyCode: 'USD'
+          }
+        }
       }
     },
     {
       id: 2,
       video: '/assets/2.mp4',
-      productTitle: 'Recovery Bundle',
-      productPrice: {
-        amount: '129.99',
-        currencyCode: 'USD'
+      product: {
+        title: 'Magnesium L-Threonate',
+        handle: 'magnesium-l-threonate',
+        priceRange: {
+          minVariantPrice: {
+            amount: '49.95',
+            currencyCode: 'USD'
+          }
+        }
       }
     },
     {
       id: 3,
       video: '/assets/3.mp4',
-      productTitle: 'Energy Bundle',
-      productPrice: {
-        amount: '139.99',
-        currencyCode: 'USD'
+      product: {
+        title: 'Energy Bundle',
+        handle: 'energy-bundle',
+        priceRange: {
+          minVariantPrice: {
+            amount: '139.99',
+            currencyCode: 'USD'
+          }
+        }
       }
     },
     {
       id: 4,
       video: '/assets/4.mp4',
-      productTitle: 'Focus Bundle',
-      productPrice: {
-        amount: '119.99',
-        currencyCode: 'USD'
+      product: {
+        title: 'Focus Bundle',
+        handle: 'focus-bundle',
+        priceRange: {
+          minVariantPrice: {
+            amount: '119.99',
+            currencyCode: 'USD'
+          }
+        }
       }
     },
     {
       id: 5,
       video: '/assets/5.mp4',
-      productTitle: 'Wellness Bundle',
-      productPrice: {
-        amount: '159.99',
-        currencyCode: 'USD'
+      product: {
+        title: 'Wellness Bundle',
+        handle: 'wellness-bundle',
+        priceRange: {
+          minVariantPrice: {
+            amount: '159.99',
+            currencyCode: 'USD'
+          }
+        }
       }
     }
   ];
@@ -179,17 +209,23 @@ export function TestimonialsCarousel() {
                         <h3 className={`font-bold text-black ${
                           index === currentIndex ? 'text-base' : 'text-sm'
                         }`}>
-                          {testimonial.productTitle}
+                          {testimonial.product.title}
                         </h3>
                         <Money 
-                          data={testimonial.productPrice}
+                          data={{
+                            amount: testimonial.product.priceRange.minVariantPrice.amount,
+                            currencyCode: testimonial.product.priceRange.minVariantPrice.currencyCode
+                          }}
                           className="text-black/70"
                         />
                       </div>
                       {index === currentIndex && (
-                        <button className="ml-4 bg-black text-white px-4 py-2 rounded-lg hover:bg-black/90 transition-colors">
+                        <Link
+                          to={`/products/${testimonial.product.handle}`}
+                          className="ml-4 bg-black text-white px-4 py-2 rounded-lg hover:bg-black/90 transition-colors"
+                        >
                           Shop Now
-                        </button>
+                        </Link>
                       )}
                     </div>
                   </div>

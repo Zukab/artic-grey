@@ -48,12 +48,6 @@ export function BundlesSection({products}: {products: any}) {
               Bundles
             </h2>
           </div>
-          <Link 
-            to="/collections/bundles"
-            className="text-black text-lg underline underline-offset-4 hover:text-black/70 transition-colors"
-          >
-            View All Bundles
-          </Link>
         </div>
 
         {/* Navigation Pills */}

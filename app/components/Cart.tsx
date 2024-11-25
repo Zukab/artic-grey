@@ -35,13 +35,90 @@ export function Cart({
   onClose?: () => void;
   cart: CartReturn | null;
 }) {
-  const linesCount = Boolean(cart?.lines?.edges?.length || 0);
-
   return (
-    <>
-      <CartEmpty hidden={linesCount} onClose={onClose} layout={layout} />
-      <CartDetails cart={cart} layout={layout} />
-    </>
+    <div className="flex flex-col h-full bg-white">
+      {/* Header */}
+      <div className="flex items-center justify-between p-4 border-b border-gray-200">
+        <div className="flex items-center gap-2">
+          <h2 className="text-xl font-bold text-black">Your Bag</h2>
+          <span className="bg-black text-white w-6 h-6 rounded-full flex items-center justify-center text-sm">
+            {cart?.totalQuantity || 0}
+          </span>
+        </div>
+        <button 
+          onClick={onClose}
+          className="text-black hover:text-gray-600"
+        >
+          ✕
+        </button>
+      </div>
+
+      {/* Empty State Content */}
+      <div className="flex-1 p-4">
+        <p className="text-center text-gray-600 mb-4">
+          Looks like you haven't added anything yet, let's get you started!
+        </p>
+        <button
+          onClick={onClose}
+          className="w-full bg-black text-white py-3 rounded-lg text-sm font-medium mb-8"
+        >
+          Continue shopping
+        </button>
+
+        {/* Shop Best Sellers */}
+        <div className="mt-8">
+          <h3 className="text-xl font-bold text-black mb-4">Shop Best Sellers</h3>
+          <div className="grid gap-4">
+            {[
+              {
+                title: 'PR Lotion Starter bundle',
+                price: 'COP 99.99',
+                tags: ['GMO Free', 'Gluten Free', 'Vegan', 'Dairy Free'],
+                description: 'Supports cognitive function'
+              },
+              {
+                title: 'Male Hormone Support Bundle',
+                price: 'COP 99.99',
+                tags: ['GMO Free', 'Gluten Free', 'Vegan', 'Dairy Free'],
+                description: 'Supports cognitive function'
+              }
+            ].map((product, index) => (
+              <div key={index} className="bg-white border rounded-xl p-4">
+                <div className="flex gap-4">
+                  <div className="w-24 h-24 bg-gray-100 rounded-lg"></div>
+                  <div className="flex-1">
+                    <h3 className="font-medium text-sm mb-1 text-black">{product.title}</h3>
+                    <p className="text-xs text-gray-600 mb-2">{product.description}</p>
+                    <div className="flex flex-wrap gap-1 mb-2">
+                      {product.tags.map((tag) => (
+                        <span 
+                          key={tag} 
+                          className="text-[10px] font-medium px-2 py-0.5 bg-gray-100 text-gray-800 rounded-full"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="flex items-center justify-between mt-2">
+                      <div className="flex items-center">
+                        {[...Array(5)].map((_, i) => (
+                          <svg key={i} className="w-3 h-3 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                          </svg>
+                        ))}
+                      </div>
+                      <button className="text-sm font-medium text-black hover:text-black/70">
+                        Add · {product.price}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -52,22 +129,62 @@ export function CartDetails({
   layout: Layouts;
   cart: CartType | null;
 }) {
-  // @todo: get optimistic cart cost
   const cartHasItems = !!cart && cart.totalQuantity > 0;
-  const container = {
-    drawer: 'grid grid-cols-1 h-screen-no-nav grid-rows-[1fr_auto]',
-    page: 'w-full pb-12 grid md:grid-cols-2 md:items-start gap-8 md:gap-8 lg:gap-12',
-  };
 
   return (
-    <div className={container[layout]}>
-      <CartLines lines={cart?.lines} layout={layout} />
-      {cartHasItems && (
-        <CartSummary cost={cart.cost} layout={layout}>
-          <CartDiscounts discountCodes={cart.discountCodes} />
-          <CartCheckoutActions checkoutUrl={cart.checkoutUrl} />
-        </CartSummary>
-      )}
+    <div className="flex-1 px-4">
+      <div className="flex flex-col h-full">
+        {/* Cart Items */}
+        <div className="flex-1 overflow-auto py-4">
+          <CartLines lines={cart?.lines} layout={layout} />
+        </div>
+
+        {/* Enhance Your Performance Section */}
+        {cartHasItems && (
+          <div className="py-6 border-t">
+            <h3 className="text-xl font-bold mb-4">Enhance Your Performance</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Product Cards - Scrollable on mobile */}
+              <div className="flex overflow-x-auto gap-4 pb-4 -mx-4 px-4 md:grid md:grid-cols-3 md:mx-0">
+                {[
+                  {
+                    title: 'Tongkat & Fadogia 60 Day Supply',
+                    price: '$49.95'
+                  },
+                  {
+                    title: 'Male Hormone Support Bundle',
+                    price: '$49.95'
+                  },
+                  {
+                    title: 'Complete Test Bundle',
+                    price: '$49.95'
+                  }
+                ].map((product, index) => (
+                  <div key={index} className="flex-shrink-0 w-[280px] md:w-full">
+                    <div className="bg-white rounded-xl p-4 border">
+                      <div className="aspect-square bg-gray-100 rounded-lg mb-4"></div>
+                      <h4 className="font-medium text-sm mb-2">{product.title}</h4>
+                      <button className="w-full bg-black text-white rounded-lg py-2 text-sm">
+                        Add to Cart · {product.price}
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Cart Summary */}
+        {cartHasItems && (
+          <div className="py-4 border-t">
+            <CartSummary cost={cart.cost} layout={layout}>
+              <CartDiscounts discountCodes={cart.discountCodes} />
+              <CartCheckoutActions checkoutUrl={cart.checkoutUrl} />
+            </CartSummary>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
@@ -189,9 +306,9 @@ function CartCheckoutActions({checkoutUrl}: {checkoutUrl: string}) {
   return (
     <div className="flex flex-col mt-2">
       <a href={checkoutUrl} target="_self">
-        <Button as="span" width="full">
+        <button className="w-full bg-black text-white py-4 rounded-xl font-medium hover:bg-black/90 transition-colors">
           Continue to Checkout
-        </Button>
+        </button>
       </a>
       {/* @todo: <CartShopPayButton cart={cart} /> */}
     </div>
@@ -207,30 +324,25 @@ function CartSummary({
   cost: CartCost;
   layout: Layouts;
 }) {
-  const summary = {
-    drawer: 'grid gap-4 p-6 border-t md:px-12',
-    page: 'sticky top-nav grid gap-6 p-4 md:px-6 md:translate-y-4 bg-primary/5 rounded w-full',
-  };
-
   return (
-    <section aria-labelledby="summary-heading" className={summary[layout]}>
-      <h2 id="summary-heading" className="sr-only">
-        Order summary
-      </h2>
-      <dl className="grid">
-        <div className="flex items-center justify-between font-medium">
-          <Text as="dt">Subtotal</Text>
-          <Text as="dd" data-test="subtotal">
-            {cost?.subtotalAmount?.amount ? (
-              <Money data={cost?.subtotalAmount} />
-            ) : (
-              '-'
-            )}
-          </Text>
-        </div>
-      </dl>
+    <div className="grid gap-4">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-sm text-gray-600">Subtotal</span>
+        <span className="font-medium">
+          {cost?.subtotalAmount?.amount ? (
+            <Money data={cost?.subtotalAmount} />
+          ) : (
+            '-'
+          )}
+        </span>
+      </div>
+      
       {children}
-    </section>
+
+      <button className="w-full bg-black text-white py-4 rounded-xl font-medium">
+        Checkout
+      </button>
+    </div>
   );
 }
 
@@ -251,55 +363,55 @@ function CartLineItem({line}: {line: CartLine}) {
   return (
     <li
       key={id}
-      className="flex gap-4"
+      className="flex gap-4 p-4"
       style={{
-        // Hide the line item if the optimistic data action is remove
-        // Do not remove the form from the DOM
         display: optimisticData?.action === 'remove' ? 'none' : 'flex',
       }}
     >
-      <div className="flex-shrink">
+      {/* Product Image */}
+      <div className="flex-shrink-0">
         {merchandise.image && (
           <Image
             width={110}
             height={110}
             data={merchandise.image}
-            className="object-cover object-center w-24 h-24 border rounded md:w-28 md:h-28"
+            className="object-cover object-center w-[110px] h-[110px] rounded-xl bg-neutral-100"
             alt={merchandise.title}
           />
         )}
       </div>
 
-      <div className="flex justify-between flex-grow">
-        <div className="grid gap-2">
-          <Heading as="h3" size="copy">
-            {merchandise?.product?.handle ? (
-              <Link to={`/products/${merchandise.product.handle}`}>
-                {merchandise?.product?.title || ''}
-              </Link>
-            ) : (
-              <Text>{merchandise?.product?.title || ''}</Text>
-            )}
-          </Heading>
-
-          <div className="grid pb-2">
-            {(merchandise?.selectedOptions || []).map((option) => (
-              <Text color="subtle" key={option.name}>
-                {option.name}: {option.value}
-              </Text>
-            ))}
-          </div>
-
-          <div className="flex items-center gap-2">
-            <div className="flex justify-start text-copy">
-              <CartLineQuantityAdjust line={line} />
-            </div>
-            <ItemRemoveButton lineId={id} />
-          </div>
+      {/* Product Details */}
+      <div className="flex flex-col flex-grow justify-between">
+        <div>
+          <Link 
+            to={`/products/${merchandise?.product.handle}`}
+            className="text-black hover:text-black/70"
+          >
+            <p className="font-medium text-base mb-1">
+              {merchandise?.product?.title || ''}
+            </p>
+          </Link>
+          <p className="text-sm text-gray-500 mb-4">
+            {merchandise?.title !== merchandise?.product?.title ? merchandise?.title : ''}
+          </p>
         </div>
-        <Text>
-          <CartLinePrice line={line} as="span" />
-        </Text>
+
+        {/* Price and Controls */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <CartLineQuantityAdjust line={line} />
+            <button 
+              onClick={() => {}} 
+              className="text-gray-400 hover:text-gray-600"
+            >
+              Remove
+            </button>
+          </div>
+          <Text className="font-medium">
+            <CartLinePrice line={line} as="span" />
+          </Text>
+        </div>
       </div>
     </li>
   );
@@ -339,47 +451,36 @@ function CartLineQuantityAdjust({line}: {line: CartLine}) {
   const nextQuantity = Number((optimisticQuantity + 1).toFixed(0));
 
   return (
-    <>
-      <label htmlFor={`quantity-${lineId}`} className="sr-only">
-        Quantity, {optimisticQuantity}
-      </label>
-      <div className="flex items-center border rounded">
-        <UpdateCartButton lines={[{id: lineId, quantity: prevQuantity}]}>
-          <button
-            name="decrease-quantity"
-            aria-label="Decrease quantity"
-            className="w-10 h-10 transition text-primary/50 hover:text-primary disabled:text-primary/10"
-            value={prevQuantity}
-            disabled={optimisticQuantity <= 1}
-          >
-            <span>&#8722;</span>
-            <OptimisticInput
-              id={optimisticId}
-              data={{quantity: prevQuantity}}
-            />
-          </button>
-        </UpdateCartButton>
+    <div className="flex items-center border rounded-lg">
+      <UpdateCartButton lines={[{id: lineId, quantity: prevQuantity}]}>
+        <button
+          name="decrease-quantity"
+          aria-label="Decrease quantity"
+          className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-800 disabled:text-gray-300"
+          value={prevQuantity}
+          disabled={optimisticQuantity <= 1}
+        >
+          <span>−</span>
+          <OptimisticInput id={optimisticId} data={{quantity: prevQuantity}} />
+        </button>
+      </UpdateCartButton>
 
-        <div className="px-2 text-center" data-test="item-quantity">
-          {optimisticQuantity}
-        </div>
-
-        <UpdateCartButton lines={[{id: lineId, quantity: nextQuantity}]}>
-          <button
-            className="w-10 h-10 transition text-primary/50 hover:text-primary"
-            name="increase-quantity"
-            value={nextQuantity}
-            aria-label="Increase quantity"
-          >
-            <span>&#43;</span>
-            <OptimisticInput
-              id={optimisticId}
-              data={{quantity: nextQuantity}}
-            />
-          </button>
-        </UpdateCartButton>
+      <div className="px-3 text-center" data-test="item-quantity">
+        {optimisticQuantity}
       </div>
-    </>
+
+      <UpdateCartButton lines={[{id: lineId, quantity: nextQuantity}]}>
+        <button
+          className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-800"
+          name="increase-quantity"
+          value={nextQuantity}
+          aria-label="Increase quantity"
+        >
+          <span>+</span>
+          <OptimisticInput id={optimisticId} data={{quantity: nextQuantity}} />
+        </button>
+      </UpdateCartButton>
+    </div>
   );
 }
 
@@ -435,40 +536,75 @@ export function CartEmpty({
   layout?: Layouts;
   onClose?: () => void;
 }) {
-  const scrollRef = useRef(null);
-  const {y} = useScroll(scrollRef);
-
-  const container = {
-    drawer: clsx([
-      'content-start gap-4 px-6 pb-8 transition overflow-y-scroll md:gap-12 md:px-12 h-screen-no-nav md:pb-12',
-      y > 0 ? 'border-t' : '',
-    ]),
-    page: clsx([
-      hidden ? '' : 'grid',
-      `pb-12 w-full md:items-start gap-4 md:gap-8 lg:gap-12`,
-    ]),
-  };
+  if (hidden) return null;
 
   return (
-    <div ref={scrollRef} className={container[layout]} hidden={hidden}>
-      <section className="grid gap-6">
-        <Text format>
-          Looks like you haven&rsquo;t added anything yet, let&rsquo;s get you
-          started!
-        </Text>
-        <div>
-          <Button onClick={onClose}>Continue shopping</Button>
+    <div className="flex flex-col h-full">
+      <div className="flex-1 px-4 py-6">
+        <p className="text-gray-600 text-center mb-6">
+          Looks like you haven't added anything yet, let's get you started!
+        </p>
+        <button
+          onClick={onClose}
+          className="w-full bg-black text-white py-3 rounded-lg text-sm font-medium mb-8"
+        >
+          Continue shopping
+        </button>
+
+        <div className="border-t pt-6">
+          <h2 className="text-xl font-bold mb-6">Shop Best Sellers</h2>
+          <div className="grid gap-4">
+            {[
+              {
+                title: 'PR Lotion Starter bundle',
+                price: 'COP 99.99',
+                image: '/path-to-image1.jpg',
+                tags: ['GMO Free', 'Gluten Free', 'Vegan', 'Dairy Free'],
+                description: 'Supports cognitive function'
+              },
+              {
+                title: 'Male Hormone Support Bundle',
+                price: 'COP 99.99',
+                image: '/path-to-image2.jpg',
+                tags: ['GMO Free', 'Gluten Free', 'Vegan', 'Dairy Free'],
+                description: 'Supports cognitive function'
+              }
+            ].map((product, index) => (
+              <div key={index} className="bg-white rounded-xl p-4">
+                <div className="flex gap-4">
+                  <div className="w-24 h-24 bg-gray-100 rounded-lg"></div>
+                  <div className="flex-1">
+                    <div className="flex flex-wrap gap-1 mb-2">
+                      {product.tags.map((tag) => (
+                        <span 
+                          key={tag} 
+                          className="text-[10px] font-medium px-2 py-0.5 bg-black/5 text-black rounded-full"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <h3 className="font-medium text-sm mb-1">{product.title}</h3>
+                    <p className="text-xs text-gray-600 mb-2">{product.description}</p>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        {[...Array(5)].map((_, i) => (
+                          <svg key={i} className="w-3 h-3 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                          </svg>
+                        ))}
+                      </div>
+                      <button className="text-sm font-medium text-black hover:text-black/70">
+                        Add · {product.price}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-      </section>
-      <section className="grid gap-8 pt-16">
-        <FeaturedProducts
-          count={4}
-          heading="Shop Best Sellers"
-          layout={layout}
-          onClose={onClose}
-          sortKey="BEST_SELLING"
-        />
-      </section>
+      </div>
     </div>
   );
 }
