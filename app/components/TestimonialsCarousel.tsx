@@ -146,11 +146,7 @@ export function TestimonialsCarousel() {
                       <video
                         ref={el => videoRefs.current[index] = el}
                         src={testimonial.video}
-                        className={`w-full h-full transition-all duration-500 ${
-                          index === currentIndex 
-                            ? 'object-cover' 
-                            : 'object-cover'
-                        }`}
+                        className="w-full h-full object-cover"
                         muted={isMuted}
                         playsInline
                         loop
@@ -158,7 +154,7 @@ export function TestimonialsCarousel() {
                       {index === currentIndex && (
                         <button
                           onClick={() => setIsMuted(!isMuted)}
-                          className="absolute bottom-4 right-4 bg-black/80 p-2 rounded-full hover:bg-black transition-colors"
+                          className="absolute top-4 right-4 bg-black/80 p-2 rounded-full hover:bg-black transition-colors z-20"
                         >
                           {isMuted ? (
                             <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
