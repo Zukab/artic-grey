@@ -1,24 +1,42 @@
-import {useState} from 'react';
+import {useState, useRef, useEffect} from 'react';
 import {Link} from '~/components/Link';
 import {Money} from '@shopify/hydrogen';
 
-interface Testimonial {
+type Testimonial = {
   id: number;
-  image: string;
+  video: string;
   productTitle: string;
   productPrice: {
     amount: string;
     currencyCode: string;
   };
-}
+};
 
 export function TestimonialsCarousel() {
   const [currentIndex, setCurrentIndex] = useState(2);
+  const [isMuted, setIsMuted] = useState(true);
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+
+  useEffect(() => {
+    videoRefs.current.forEach((videoRef, index) => {
+      if (videoRef) {
+        videoRef.muted = isMuted;
+        if (index === currentIndex) {
+          videoRef.play().catch(() => {
+            // Manejar el error silenciosamente
+          });
+        } else {
+          videoRef.pause();
+          videoRef.currentTime = 0;
+        }
+      }
+    });
+  }, [currentIndex, isMuted]);
 
   const testimonials: Testimonial[] = [
     {
       id: 1,
-      image: '/assets/1.png',
+      video: '/assets/1.mp4',
       productTitle: 'Performance Bundle',
       productPrice: {
         amount: '149.99',
@@ -27,7 +45,7 @@ export function TestimonialsCarousel() {
     },
     {
       id: 2,
-      image: '/assets/2.png',
+      video: '/assets/2.mp4',
       productTitle: 'Recovery Bundle',
       productPrice: {
         amount: '129.99',
@@ -36,7 +54,7 @@ export function TestimonialsCarousel() {
     },
     {
       id: 3,
-      image: '/assets/3.png',
+      video: '/assets/3.mp4',
       productTitle: 'Energy Bundle',
       productPrice: {
         amount: '139.99',
@@ -45,7 +63,7 @@ export function TestimonialsCarousel() {
     },
     {
       id: 4,
-      image: '/assets/4.png',
+      video: '/assets/4.mp4',
       productTitle: 'Focus Bundle',
       productPrice: {
         amount: '119.99',
@@ -54,7 +72,7 @@ export function TestimonialsCarousel() {
     },
     {
       id: 5,
-      image: '/assets/5.png',
+      video: '/assets/5.mp4',
       productTitle: 'Wellness Bundle',
       productPrice: {
         amount: '159.99',
@@ -124,15 +142,37 @@ export function TestimonialsCarousel() {
                         : 'h-[516px]'
                     }`}
                   >
-                    <img
-                      src={testimonial.image}
-                      alt="Customer testimonial"
-                      className={`w-full h-full transition-all duration-500 ${
-                        index === currentIndex 
-                          ? 'object-cover' 
-                          : 'object-cover'
-                      }`}
-                    />
+                    <div className="relative">
+                      <video
+                        ref={el => videoRefs.current[index] = el}
+                        src={testimonial.video}
+                        className={`w-full h-full transition-all duration-500 ${
+                          index === currentIndex 
+                            ? 'object-cover' 
+                            : 'object-cover'
+                        }`}
+                        muted={isMuted}
+                        playsInline
+                        loop
+                      />
+                      {index === currentIndex && (
+                        <button
+                          onClick={() => setIsMuted(!isMuted)}
+                          className="absolute bottom-4 right-4 bg-black/80 p-2 rounded-full hover:bg-black transition-colors"
+                        >
+                          {isMuted ? (
+                            <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+                            </svg>
+                          ) : (
+                            <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                            </svg>
+                          )}
+                        </button>
+                      )}
+                    </div>
                   </div>
 
                   <div className={`mt-4 transition-all duration-500`}>

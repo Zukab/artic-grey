@@ -20,6 +20,7 @@ import {TestimonialsCarousel} from '~/components/TestimonialsCarousel';
 import {BundlesSection} from '~/components/BundlesSection';
 import {ProductShowcase} from '~/components/ProductShowcase';
 import {BlogArticles} from '~/components/BlogArticles';
+import {InstagramFeed} from '~/components/InstagramFeed';
 
 export const headers = routeHeaders;
 
@@ -238,10 +239,9 @@ export default function Homepage() {
               className="w-full h-full object-cover"
               poster="/assets/hero-poster.jpg"
             >
-              <source src="/assets/hero-video.mp4" type="video/mp4" />
+              <source src="assets/hero-video.mp4" type="video/mp4" />
             </video>
           </div>
-
           {/* Texto del Hero - Ajustes responsive */}
           <div className="relative z-10 flex flex-col justify-end h-full text-white px-4 sm:px-8 md:px-12 pb-32 md:pb-48">
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[6rem] font-bold mb-4 md:mb-8 max-w-3xl leading-[1.1]">
@@ -612,6 +612,8 @@ export default function Homepage() {
       </section>
 
       <BlogArticles />
+
+      <InstagramFeed />
     </div>
   );
 }
