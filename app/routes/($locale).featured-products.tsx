@@ -56,3 +56,21 @@ export const FEATURED_ITEMS_QUERY = `#graphql
   }
   ${PRODUCT_CARD_FRAGMENT}
 ` as const;
+
+export async function getFeaturedData(
+  storefront: LoaderFunctionArgs['context']['storefront'],
+  {pageBy = 12}: {pageBy?: number} = {}
+) {
+  const data = await storefront.query(FEATURED_ITEMS_QUERY, {
+    variables: {
+      pageBy,
+      country: storefront.i18n.country,
+      language: storefront.i18n.language,
+    },
+    cache: storefront.CacheLong(),
+  });
+
+  return {
+    featuredProducts: data.products.nodes,
+  };
+}
