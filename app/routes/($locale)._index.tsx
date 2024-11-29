@@ -371,13 +371,13 @@ export default function Homepage() {
               ].map((goal, index) => (
                 <div 
                   key={goal.title} 
-                  className="flex-shrink-0 w-[85vw] sm:w-[45vw] md:w-[calc(33.333%-1rem)] group hover:cursor-pointer transform transition-all duration-300 hover:-translate-y-1"
+                  className="flex-shrink-0 w-[70vw] sm:w-[35vw] md:w-[calc(23%-1rem)] group hover:cursor-pointer transform transition-all duration-300 hover:-translate-y-1"
                 >
                   <div className="h-[300px] md:h-[380px] mb-6 overflow-hidden rounded-3xl bg-gray-100 shadow-md transition-all duration-300 group-hover:shadow-xl">
                     <img
                       src={goal.image}
                       alt={goal.title}
-                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      className="h-full w-full object-contain transition-transform duration-300"
                       width={288}
                       height={392}
                     />
