@@ -156,26 +156,29 @@ export default function Homepage() {
 
   const handleGoalsScroll = (direction: 'left' | 'right') => {
     if (!goalsCarouselRef.current) return;
-    
+
     const scrollAmount = goalsCarouselRef.current.clientWidth;
     const maxScroll = goalsCarouselRef.current.scrollWidth - goalsCarouselRef.current.clientWidth;
     const currentScroll = goalsCarouselRef.current.scrollLeft;
-    
-    if (direction === 'left') {
-      const newScroll = Math.max(currentScroll - scrollAmount, 0);
-      goalsCarouselRef.current.scrollTo({
-        left: newScroll,
-        behavior: 'smooth'
-      });
-      setGoalsIndex(newScroll > 0 ? 1 : 0);
-    } else {
-      const newScroll = Math.min(currentScroll + scrollAmount, maxScroll);
-      goalsCarouselRef.current.scrollTo({
-        left: newScroll,
-        behavior: 'smooth'
-      });
-      setGoalsIndex(newScroll < maxScroll ? 0 : 1);
-    }
+    const targetScroll = direction === 'left'
+      ? Math.max(currentScroll - scrollAmount, 0)
+      : Math.min(currentScroll + scrollAmount, maxScroll);
+
+    const step = () => {
+      if (!goalsCarouselRef.current) return;
+      const distance = targetScroll - goalsCarouselRef.current.scrollLeft;
+      const stepAmount = distance / 10;
+
+      if (Math.abs(stepAmount) > 1) {
+        goalsCarouselRef.current.scrollLeft += stepAmount;
+        requestAnimationFrame(step);
+      } else {
+        goalsCarouselRef.current.scrollLeft = targetScroll;
+        setGoalsIndex(targetScroll === 0 ? 0 : targetScroll === maxScroll ? 2 : 1);
+      }
+    };
+
+    requestAnimationFrame(step);
   };
 
   const handleSupplementsScroll = (direction: 'left' | 'right') => {
@@ -324,8 +327,8 @@ export default function Homepage() {
           <div className="relative -mx-4 md:mx-0 lg:mx-0">
             <button 
               onClick={() => handleGoalsScroll('left')}
-              className={`absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-black/80 p-3 rounded-full shadow-lg hidden md:block hover:bg-black transition-colors ${goalsCarouselRef.current?.scrollLeft === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
-              disabled={goalsCarouselRef.current?.scrollLeft === 0}
+              className={`absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-black/80 p-3 rounded-full shadow-lg hidden md:block hover:bg-black transition-colors ${goalsIndex === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={goalsIndex === 0}
             >
               <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -398,8 +401,8 @@ export default function Homepage() {
 
             <button 
               onClick={() => handleGoalsScroll('right')}
-              className={`absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-black/80 p-3 rounded-full shadow-lg hidden md:block hover:bg-black transition-colors ${goalsCarouselRef.current?.scrollLeft >= (goalsCarouselRef.current?.scrollWidth - goalsCarouselRef.current?.clientWidth) ? 'opacity-50 cursor-not-allowed' : ''}`}
-              disabled={goalsCarouselRef.current?.scrollLeft >= (goalsCarouselRef.current?.scrollWidth - goalsCarouselRef.current?.clientWidth)}
+              className={`absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-black/80 p-3 rounded-full shadow-lg hidden md:block hover:bg-black transition-colors ${goalsIndex === 2 ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={goalsIndex === 2}
             >
               <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
