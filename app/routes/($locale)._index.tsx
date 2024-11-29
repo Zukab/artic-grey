@@ -243,7 +243,7 @@ export default function Homepage() {
           </div>
           {/* Texto del Hero - Ajustes responsive */}
           <div className="relative z-10 flex flex-col justify-end h-full text-white px-4 sm:px-8 md:px-12 pb-32 md:pb-48">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[6rem] font-bold mb-4 md:mb-8 max-w-3xl leading-[1.1]">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[6rem] font-semibold mb-4 md:mb-8 max-w-3xl leading-[1.1] font-['Rubik']">
               {'Great things never came\nfrom comfort zones.'}
             </h1>
             <Button
