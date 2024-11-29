@@ -187,22 +187,25 @@ export default function Homepage() {
     const scrollAmount = supplementsCarouselRef.current.clientWidth;
     const maxScroll = supplementsCarouselRef.current.scrollWidth - supplementsCarouselRef.current.clientWidth;
     const currentScroll = supplementsCarouselRef.current.scrollLeft;
-    
-    if (direction === 'left') {
-      const newScroll = Math.max(currentScroll - scrollAmount, 0);
-      supplementsCarouselRef.current.scrollTo({
-        left: newScroll,
-        behavior: 'smooth'
-      });
-      setSupplementsIndex(newScroll > 0 ? 1 : 0);
-    } else {
-      const newScroll = Math.min(currentScroll + scrollAmount, maxScroll);
-      supplementsCarouselRef.current.scrollTo({
-        left: newScroll,
-        behavior: 'smooth'
-      });
-      setSupplementsIndex(newScroll < maxScroll ? 0 : 1);
-    }
+    const targetScroll = direction === 'left'
+      ? Math.max(currentScroll - scrollAmount, 0)
+      : Math.min(currentScroll + scrollAmount, maxScroll);
+
+    const step = () => {
+      if (!supplementsCarouselRef.current) return;
+      const distance = targetScroll - supplementsCarouselRef.current.scrollLeft;
+      const stepAmount = distance / 10;
+
+      if (Math.abs(stepAmount) > 1) {
+        supplementsCarouselRef.current.scrollLeft += stepAmount;
+        requestAnimationFrame(step);
+      } else {
+        supplementsCarouselRef.current.scrollLeft = targetScroll;
+        setSupplementsIndex(targetScroll === 0 ? 0 : targetScroll === maxScroll ? 2 : 1);
+      }
+    };
+
+    requestAnimationFrame(step);
   };
 
   useEffect(() => {
