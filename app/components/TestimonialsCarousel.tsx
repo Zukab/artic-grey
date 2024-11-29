@@ -138,7 +138,7 @@ export function TestimonialsCarousel() {
           </p>
         </div>
 
-        <div className="relative overflow-hidden">
+        <div className="relative w-[1440px] mx-auto overflow-hidden">
           <button 
             onClick={handlePrevious}
             className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-black/80 p-3 rounded-full shadow-lg hover:bg-black transition-colors"
@@ -148,11 +148,11 @@ export function TestimonialsCarousel() {
             </svg>
           </button>
 
-          <div className="relative w-[1200px] mx-auto overflow-hidden">
+          <div className="relative w-full overflow-hidden">
             <div 
-              className="flex gap-8 transition-transform duration-500 ease-in-out mx-auto"
+              className="flex gap-8 transition-transform duration-500 ease-in-out"
               style={{
-                transform: `translateX(calc(38% - ${currentIndex * 25}% - ${currentIndex * 1}rem))`,
+                transform: `translateX(calc(32% - ${currentIndex * 400}px - ${currentIndex * 32}px))`,
                 width: 'fit-content'
               }}
             >
@@ -161,15 +161,15 @@ export function TestimonialsCarousel() {
                   key={testimonial.id}
                   className={`flex-shrink-0 transition-all duration-500 ${
                     index === currentIndex 
-                      ? 'w-[500px] z-10' 
-                      : 'w-[300px] opacity-50'
+                      ? 'w-[400px] z-10' 
+                      : 'w-[350px] opacity-50'
                   }`}
                 >
                   <div 
-                    className={`rounded-2xl overflow-hidden transition-all duration-500 ${
+                    className={`rounded-2xl overflow-hidden ${
                       index === currentIndex 
-                        ? 'h-[516px]' 
-                        : 'h-[516px]'
+                        ? 'h-[450px]' 
+                        : 'h-[450px]'
                     }`}
                   >
                     <div className="relative">
