@@ -92,7 +92,7 @@ export function ProductCard({
           {[...Array(5)].map((_, i) => (
             <svg
               key={i}
-              className="w-4 h-4 text-yellow-400"
+              className="w-4 h-4 text-[#1B1F23]"
               fill="currentColor"
               viewBox="0 0 20 20"
             >

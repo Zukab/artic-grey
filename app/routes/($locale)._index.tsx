@@ -315,10 +315,10 @@ export default function Homepage() {
       <section className="py-8 md:py-16 bg-white">
         <div className="max-w-[1440px] mx-auto px-4 md:px-8">
           <div className="text-center mb-12 md:mb-24">
-            <span className="text-sm md:text-base uppercase tracking-wider text-gray-500 mb-2 md:mb-4 block font-medium">
+            <span className="text-sm md:text-base uppercase tracking-wider text-black mb-2 md:mb-4 block font-medium">
               COMFORTABLY UNCOMFORTABLE
             </span>
-            <h2 className="text-3xl md:text-6xl font-bold mb-4 md:mb-8 text-black">
+            <h2 className="text-3xl md:text-6xl font-bold mb-4 md:mb-8 text-[#1B1F23]">
               Start with your Goals
             </h2>
             <p className="text-base md:text-2xl text-gray-600 font-medium max-w-3xl mx-auto">

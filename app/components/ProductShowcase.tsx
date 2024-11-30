@@ -63,7 +63,7 @@ export function ProductShowcase() {
             </div>
 
             {/* CTA Button */}
-            <button className="w-full bg-black text-white py-4 rounded-xl font-medium hover:bg-black/90 transition-colors">
+            <button className="w-full bg-[#1B1F23] text-white py-4 rounded-xl font-medium hover:bg-black/90 transition-colors">
               Customize This Blend
             </button>
           </div>

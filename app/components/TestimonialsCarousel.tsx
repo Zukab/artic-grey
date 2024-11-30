@@ -21,6 +21,17 @@ export function TestimonialsCarousel() {
   const [currentIndex, setCurrentIndex] = useState(2);
   const [isMuted, setIsMuted] = useState(true);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+  const [windowWidth, setWindowWidth] = useState(0);
+
+  useEffect(() => {
+    setWindowWidth(window.innerWidth);
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     videoRefs.current.forEach((videoRef, index) => {
@@ -123,55 +134,55 @@ export function TestimonialsCarousel() {
     );
   };
 
+  const getTransform = () => {
+    if (typeof window === 'undefined') return '';
+    
+    if (windowWidth < 768) {
+      return `translateX(-${currentIndex * 100}vw)`;
+    }
+    
+    // En desktop ajustamos el cálculo para el nuevo gap
+    return `translateX(calc(32% - ${currentIndex * 400}px - ${currentIndex * 48}px))`;
+  };
+
   return (
-    <section className="py-24 bg-white overflow-hidden">
-      <div className="max-w-[1440px] mx-auto px-4 md:px-8">
-        <div className="text-center mb-16">
-          <span className="text-sm uppercase tracking-wider text-gray-500 mb-4 block">
+    <section className="py-12 md:py-24 bg-white overflow-hidden">
+      <div className="w-full md:max-w-[1440px] mx-auto px-4 md:px-8">
+        <div className="text-center mb-8 md:mb-16">
+          <span className="text-sm uppercase tracking-wider text-gray-500 mb-2 md:mb-4 block">
             Real Results
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold text-black mb-4">
+          <h2 className="text-3xl md:text-5xl font-bold text-[#1B1F23] mb-2 md:mb-4">
             Transform Your Life
           </h2>
-          <p className="text-xl text-gray-600 font-medium max-w-2xl mx-auto">
+          <p className="text-lg md:text-xl text-gray-600 font-medium max-w-2xl mx-auto">
             Join thousands of satisfied customers who have achieved their goals
           </p>
         </div>
 
-        <div className="relative w-[1440px] mx-auto overflow-hidden">
-          <button 
-            onClick={handlePrevious}
-            className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-black/80 p-3 rounded-full shadow-lg hover:bg-black transition-colors"
-          >
-            <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-
+        <div className="relative w-full md:w-[1440px] mx-auto overflow-hidden">
           <div className="relative w-full overflow-hidden">
             <div 
-              className="flex gap-8 transition-transform duration-500 ease-in-out"
+              className="flex gap-4 md:gap-12 transition-transform duration-500 ease-in-out"
               style={{
-                transform: `translateX(calc(32% - ${currentIndex * 400}px - ${currentIndex * 32}px))`,
-                width: 'fit-content'
+                transform: getTransform(),
+                width: windowWidth < 768 ? `${testimonials.length * 100}vw` : 'fit-content',
+                marginLeft: windowWidth < 768 ? '-1rem' : '0',
+                marginRight: windowWidth < 768 ? '-1rem' : '0',
               }}
             >
               {testimonials.map((testimonial, index) => (
                 <div 
                   key={testimonial.id}
-                  className={`flex-shrink-0 transition-all duration-500 ${
-                    index === currentIndex 
-                      ? 'w-[400px] z-10' 
-                      : 'w-[350px] opacity-50'
+                  className={`${
+                    windowWidth < 768 
+                      ? 'w-screen px-4' 
+                      : `${index === currentIndex ? 'w-[400px]' : 'w-[350px]'}`
+                  } flex-shrink-0 transition-all duration-500 ${
+                    index === currentIndex ? 'z-10' : 'opacity-50'
                   }`}
                 >
-                  <div 
-                    className={`rounded-2xl overflow-hidden ${
-                      index === currentIndex 
-                        ? 'h-[450px]' 
-                        : 'h-[450px]'
-                    }`}
-                  >
+                  <div className="rounded-2xl overflow-hidden h-[400px] md:h-[450px]">
                     <div className="relative">
                       <video
                         ref={el => videoRefs.current[index] = el}
@@ -235,10 +246,19 @@ export function TestimonialsCarousel() {
           </div>
 
           <button 
-            onClick={handleNext}
-            className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-black/80 p-3 rounded-full shadow-lg hover:bg-black transition-colors"
+            onClick={handlePrevious}
+            className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-10 bg-black/80 p-2 md:p-3 rounded-full shadow-lg hover:bg-black transition-colors"
           >
-            <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-5 h-5 md:w-6 md:h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+
+          <button 
+            onClick={handleNext}
+            className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-10 bg-black/80 p-2 md:p-3 rounded-full shadow-lg hover:bg-black transition-colors"
+          >
+            <svg className="w-5 h-5 md:w-6 md:h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </button>
