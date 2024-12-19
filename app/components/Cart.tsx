@@ -38,9 +38,9 @@ export function Cart({
   return (
     <div className="flex flex-col h-full bg-white">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-200">
+      <div className="flex items-center justify-between p-6 border-b border-gray-200">
         <div className="flex items-center gap-2">
-          <h2 className="text-xl font-bold text-black">Your Bag</h2>
+          <h2 className="text-xl font-bold text-black">Your Cart</h2>
           <span className="bg-black text-white w-6 h-6 rounded-full flex items-center justify-center text-sm">
             {cart?.totalQuantity || 0}
           </span>
@@ -49,74 +49,124 @@ export function Cart({
           onClick={onClose}
           className="text-black hover:text-gray-600"
         >
-          ✕
+          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
         </button>
       </div>
 
-      {/* Empty State Content */}
-      <div className="flex-1 p-4">
-        <p className="text-center text-gray-600 mb-4">
-          Looks like you haven't added anything yet, let's get you started!
-        </p>
-        <button
-          onClick={onClose}
-          className="w-full bg-black text-white py-3 rounded-lg text-sm font-medium mb-8"
-        >
-          Continue shopping
-        </button>
+      {/* Product Details */}
+      <div className="flex-1 overflow-auto">
+        <div className="mb-8">
+          <div className="bg-white p-4">
+            {/* Imagen del producto más pequeña */}
+            <div className="relative w-[300px] h-[300px] mx-auto mb-4 rounded-xl overflow-hidden">
+              <img 
+                src="/assets/3Product.png"
+                alt="Product"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            {/* Detalles del producto */}
+            <div className="flex flex-col gap-4">
+              <div>
+                <h3 className="font-medium text-lg mb-1">Magnesium L-Threonate</h3>
+                <p className="text-sm text-gray-600 mb-2">Enhances the quality of sleep</p>
+                <div className="flex flex-wrap gap-1 mb-2">
+                  {['GMO Free', 'Gluten Free', 'Vegan'].map((tag) => (
+                    <span 
+                      key={tag} 
+                      className="text-[10px] font-medium px-2 py-0.5 bg-gray-100 text-gray-800 rounded-full"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center border rounded-lg">
+                  <button className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-700">−</button>
+                  <span className="w-8 text-center">1</span>
+                  <button className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-700">+</button>
+                </div>
+                <span className="font-medium">$49.95</span>
+              </div>
+            </div>
+          </div>
+        </div>
 
-        {/* Shop Best Sellers */}
-        <div className="mt-8">
-          <h3 className="text-xl font-bold text-black mb-4">Shop Best Sellers</h3>
+        {/* Recommended Products con fondo negro */}
+        <div className="px-4 mb-8">
+          <h3 className="text-lg font-bold mb-4">Recommended Products</h3>
           <div className="grid gap-4">
             {[
               {
-                title: 'PR Lotion Starter bundle',
-                price: 'COP 99.99',
-                tags: ['GMO Free', 'Gluten Free', 'Vegan', 'Dairy Free'],
+                title: 'PR Lotion Starter Bundle',
+                price: '$99.99',
+                image: '/assets/3Product.png',
+                tags: ['GMO Free', 'Gluten Free', 'Vegan'],
                 description: 'Supports cognitive function'
               },
               {
                 title: 'Male Hormone Support Bundle',
-                price: 'COP 99.99',
-                tags: ['GMO Free', 'Gluten Free', 'Vegan', 'Dairy Free'],
-                description: 'Supports cognitive function'
+                price: '$99.99',
+                image: '/assets/3Product.png',
+                tags: ['GMO Free', 'Gluten Free', 'Vegan'],
+                description: 'Supports hormone balance'
               }
             ].map((product, index) => (
-              <div key={index} className="bg-white border rounded-xl p-4">
+              <div key={index} className="bg-black text-white rounded-xl p-4">
                 <div className="flex gap-4">
-                  <div className="w-24 h-24 bg-gray-100 rounded-lg"></div>
+                  <img 
+                    src={product.image}
+                    alt={product.title}
+                    className="w-24 h-24 object-cover rounded-lg"
+                  />
                   <div className="flex-1">
-                    <h3 className="font-medium text-sm mb-1 text-black">{product.title}</h3>
-                    <p className="text-xs text-gray-600 mb-2">{product.description}</p>
+                    <h3 className="font-medium text-sm mb-1">{product.title}</h3>
+                    <p className="text-xs text-gray-300 mb-2">{product.description}</p>
                     <div className="flex flex-wrap gap-1 mb-2">
                       {product.tags.map((tag) => (
                         <span 
                           key={tag} 
-                          className="text-[10px] font-medium px-2 py-0.5 bg-gray-100 text-gray-800 rounded-full"
+                          className="text-[10px] font-medium px-2 py-0.5 bg-white/10 text-white rounded-full"
                         >
                           {tag}
                         </span>
                       ))}
                     </div>
-                    <div className="flex items-center justify-between mt-2">
-                      <div className="flex items-center">
-                        {[...Array(5)].map((_, i) => (
-                          <svg key={i} className="w-3 h-3 text-[#1B1F23]" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                          </svg>
-                        ))}
-                      </div>
-                      <button className="text-sm font-medium text-black hover:text-black/70">
-                        Add · {product.price}
-                      </button>
-                    </div>
+                    <button className="w-full bg-white text-black py-2 rounded-lg text-sm font-medium hover:bg-white/90 transition-colors">
+                      Add · {product.price}
+                    </button>
                   </div>
                 </div>
               </div>
             ))}
           </div>
         </div>
+      </div>
+
+      {/* Cart Summary */}
+      <div className="border-t p-6">
+        <div className="mb-4">
+          <div className="flex justify-between mb-2">
+            <span className="text-gray-600">Subtotal</span>
+            <span className="font-medium">$49.95</span>
+          </div>
+          <div className="flex justify-between mb-4">
+            <span className="text-gray-600">Shipping</span>
+            <span className="text-gray-600">Calculated at checkout</span>
+          </div>
+        </div>
+        <button className="w-full bg-black text-white py-4 rounded-xl font-medium mb-3">
+          Checkout · $49.95
+        </button>
+        <button 
+          onClick={onClose}
+          className="w-full bg-gray-100 text-black py-4 rounded-xl font-medium"
+        >
+          Continue Shopping
+        </button>
       </div>
     </div>
   );
