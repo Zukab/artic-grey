@@ -70,13 +70,13 @@ export function Cart({
             {/* Detalles del producto */}
             <div className="flex flex-col gap-4">
               <div>
-                <h3 className="font-medium text-lg mb-1">Magnesium L-Threonate</h3>
-                <p className="text-sm text-gray-600 mb-2">Enhances the quality of sleep</p>
+                <h3 className="font-medium text-lg mb-1 text-black">Magnesium L-Threonate</h3>
+                <p className="text-sm text-black mb-2">Enhances the quality of sleep</p>
                 <div className="flex flex-wrap gap-1 mb-2">
                   {['GMO Free', 'Gluten Free', 'Vegan'].map((tag) => (
                     <span 
                       key={tag} 
-                      className="text-[10px] font-medium px-2 py-0.5 bg-gray-100 text-gray-800 rounded-full"
+                      className="text-[10px] font-medium px-2 py-0.5 bg-gray-100 text-black rounded-full"
                     >
                       {tag}
                     </span>
@@ -85,19 +85,19 @@ export function Cart({
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center border rounded-lg">
-                  <button className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-700">−</button>
-                  <span className="w-8 text-center">1</span>
-                  <button className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-700">+</button>
+                  <button className="w-8 h-8 flex items-center justify-center text-black hover:text-gray-700">−</button>
+                  <span className="w-8 text-center text-black">1</span>
+                  <button className="w-8 h-8 flex items-center justify-center text-black hover:text-gray-700">+</button>
                 </div>
-                <span className="font-medium">$49.95</span>
+                <span className="font-medium text-black">$49.95</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Recommended Products con fondo negro */}
+        {/* Recommended Products con fondo blanco */}
         <div className="px-4 mb-8">
-          <h3 className="text-lg font-bold mb-4">Recommended Products</h3>
+          <h3 className="text-lg font-bold mb-4 text-black">Recommended Products</h3>
           <div className="grid gap-4">
             {[
               {
@@ -115,7 +115,7 @@ export function Cart({
                 description: 'Supports hormone balance'
               }
             ].map((product, index) => (
-              <div key={index} className="bg-black text-white rounded-xl p-4">
+              <div key={index} className="bg-white border rounded-xl p-4">
                 <div className="flex gap-4">
                   <img 
                     src={product.image}
@@ -123,19 +123,19 @@ export function Cart({
                     className="w-24 h-24 object-cover rounded-lg"
                   />
                   <div className="flex-1">
-                    <h3 className="font-medium text-sm mb-1">{product.title}</h3>
-                    <p className="text-xs text-gray-300 mb-2">{product.description}</p>
+                    <h3 className="font-medium text-sm mb-1 text-black">{product.title}</h3>
+                    <p className="text-xs text-gray-600 mb-2">{product.description}</p>
                     <div className="flex flex-wrap gap-1 mb-2">
                       {product.tags.map((tag) => (
                         <span 
                           key={tag} 
-                          className="text-[10px] font-medium px-2 py-0.5 bg-white/10 text-white rounded-full"
+                          className="text-[10px] font-medium px-2 py-0.5 bg-gray-100 text-gray-800 rounded-full"
                         >
                           {tag}
                         </span>
                       ))}
                     </div>
-                    <button className="w-full bg-white text-black py-2 rounded-lg text-sm font-medium hover:bg-white/90 transition-colors">
+                    <button className="w-full bg-black text-white py-2 rounded-lg text-sm font-medium hover:bg-black/90 transition-colors">
                       Add · {product.price}
                     </button>
                   </div>
