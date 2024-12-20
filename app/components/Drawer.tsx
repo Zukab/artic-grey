@@ -61,10 +61,8 @@ export function Drawer({
                 leaveFrom="translate-x-0"
                 leaveTo={offScreen[openFrom]}
               >
-                <Dialog.Panel className="w-screen max-w-lg text-left align-middle transition-all transform shadow-xl h-screen-dynamic bg-contrast">
-                  <header
-                    className={`sticky top-0 flex items-center px-6 h-nav sm:px-8 md:px-12 justify-end`}
-                  >
+                <Dialog.Panel className="w-screen max-w-lg text-left align-middle transition-all transform shadow-xl h-screen-dynamic bg-white">
+                  <header className="hidden">
                     <button
                       type="button"
                       className="p-4 -m-4 transition text-primary hover:text-primary/50"
