@@ -55,8 +55,9 @@ export function Cart({
         </button>
       </div>
 
-      {/* Product Details */}
-      <div className="flex-1 overflow-auto">
+      {/* Contenido del carrito con fondo blanco */}
+      <div className="flex-1 overflow-auto bg-white">
+        {/* Product Details */}
         <div className="mb-8">
           <div className="bg-white p-4">
             {/* Imagen del producto más pequeña */}
