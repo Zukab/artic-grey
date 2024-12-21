@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import {useRef} from 'react';
+import {useRef, useState} from 'react';
 import useScroll from 'react-use/esm/useScroll';
 import {
   flattenConnection,
@@ -35,6 +35,45 @@ export function Cart({
   onClose?: () => void;
   cart: CartReturn | null;
 }) {
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const products = [
+    {
+      id: 1,
+      image: '/assets/Product1.png',
+      title: 'Magnesium L-Threonate',
+      description: 'Enhances the quality of sleep',
+      tags: ['GMO Free', 'Gluten Free', 'Vegan']
+    },
+    {
+      id: 2,
+      image: '/assets/Product2.png',
+      title: 'Whey Protein Isolate',
+      description: 'Muscle Performance & Recovery',
+      tags: ['GMO Free', 'Low Calorie', 'Fast Absorbing']
+    },
+    {
+      id: 3,
+      image: '/assets/Product3.png',
+      title: 'Pre-Workout Formula',
+      description: 'Energy & Focus Enhancement',
+      tags: ['Sugar Free', 'Natural', 'Vegan']
+    }
+  ];
+
+  const handleScroll = (direction: 'left' | 'right') => {
+    setCurrentIndex(prev => {
+      if (direction === 'left') {
+        return prev === 0 ? products.length - 1 : prev - 1;
+      } else {
+        return prev === products.length - 1 ? 0 : prev + 1;
+      }
+    });
+  };
+
+  const currentProduct = products[currentIndex];
+
   return (
     <div className="flex flex-col h-full bg-white">
       {/* Header */}
@@ -57,25 +96,45 @@ export function Cart({
 
       {/* Contenido del carrito con fondo blanco */}
       <div className="flex-1 overflow-auto bg-white">
-        {/* Product Details */}
         <div className="mb-8">
           <div className="bg-white p-4">
-            {/* Imagen del producto más pequeña */}
-            <div className="relative w-[300px] h-[300px] mx-auto mb-4 rounded-xl overflow-hidden">
-              <img 
-                src="/assets/3Product.png"
-                alt="Product"
-                className="w-full h-full object-cover"
-              />
+            {/* Slider de productos */}
+            <div className="relative w-[300px] mx-auto mb-4">
+              <button 
+                onClick={() => handleScroll('left')}
+                className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-black/80 p-2 rounded-full shadow-lg hover:bg-black"
+              >
+                <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+
+              <div className="w-[300px] h-[300px] rounded-xl overflow-hidden">
+                <img 
+                  src={currentProduct.image}
+                  alt={currentProduct.title}
+                  className="w-full h-full object-cover transition-all duration-300"
+                />
+              </div>
+
+              <button 
+                onClick={() => handleScroll('right')}
+                className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-black/80 p-2 rounded-full shadow-lg hover:bg-black"
+              >
+                <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
             </div>
+
             {/* Detalles del producto */}
             <div className="flex flex-col gap-4">
               <div>
-                <h3 className="font-medium text-lg mb-1 text-black">Magnesium L-Threonate</h3>
-                <p className="text-sm text-black mb-2">Enhances the quality of sleep</p>
+                <h3 className="font-medium text-lg mb-1 text-black">{currentProduct.title}</h3>
+                <p className="text-sm text-black mb-2">{currentProduct.description}</p>
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex flex-wrap gap-1">
-                    {['GMO Free', 'Gluten Free', 'Vegan'].map((tag) => (
+                    {currentProduct.tags.map((tag) => (
                       <span 
                         key={tag} 
                         className="text-[10px] font-medium px-2 py-0.5 bg-gray-100 text-black rounded-full"
@@ -97,14 +156,6 @@ export function Cart({
                     ))}
                   </div>
                 </div>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center border rounded-lg">
-                  <button className="w-8 h-8 flex items-center justify-center text-black hover:text-gray-700">−</button>
-                  <span className="w-8 text-center text-black">1</span>
-                  <button className="w-8 h-8 flex items-center justify-center text-black hover:text-gray-700">+</button>
-                </div>
-                <span className="font-medium text-black">$49.95</span>
               </div>
             </div>
           </div>
